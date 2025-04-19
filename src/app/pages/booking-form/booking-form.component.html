@@ -1,0 +1,56 @@
+<div class="booking-form-container">
+  <h2>Book an Appointment</h2>
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+    <label>Barber:</label>
+    <select formControlName="barberId">
+      <option *ngFor="let barber of barbers" [value]="barber._id">{{ barber.name }}</option>
+    </select>
+  
+    <label>Date:</label>
+    <input type="date" formControlName="date" />
+  
+    <fieldset>
+      <legend>Services</legend>
+      <label *ngFor="let service of services">
+        <input type="checkbox" [value]="service._id" (change)="toggleCheckbox($event, 'selectedServices')" />
+        {{ service.serviceName }}
+      </label>
+    </fieldset>
+  
+    <fieldset>
+      <legend>Products</legend>
+      <div *ngFor="let product of products">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="isProductSelected(product._id)"
+            (change)="toggleProductCheckbox($event, product)"
+          />
+          {{ product.productName }}
+        </label>
+    
+        <input
+          type="number"
+          [value]="getProductPrice(product._id)"
+          (input)="updateProductPrice(product._id, $event)"
+          [disabled]="!isProductSelected(product._id)"
+          placeholder="Per use price"
+        />
+      </div>
+    </fieldset>
+    
+    <p><strong>Total Product Amount:</strong> {{ bookingForm.get('totalProductAmount')?.value }}</p>
+    
+    
+  
+  
+    <label>Amount:</label>
+    <input type="number" formControlName="serviceAmount" />
+  
+    <label>Payment Mode:</label>
+    <label><input type="radio" value="cash" formControlName="paymentMode" /> Cash</label>
+    <label><input type="radio" value="online" formControlName="paymentMode" /> Online</label>
+  
+    <button type="submit">Submit Booking</button>
+  </form>
+  </div>

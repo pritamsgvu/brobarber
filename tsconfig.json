@@ -1,0 +1,39 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+      "target": "es2015",
+      "module": "es2015",
+      "lib": ["es2018", "dom"],
+      "allowJs": true,
+      "checkJs": false,
+      "jsx": "react",
+      "declaration": false,
+      "sourceMap": true,
+      "strict": true,
+      "noImplicitAny": false,
+      "noImplicitThis": true,
+      "alwaysStrict": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "importHelpers": true,
+      "downlevelIteration": true,
+      "forceConsistentCasingInFileNames": true,
+      "baseUrl": "./",
+      "paths": {
+        "@angular/*": [
+          "node_modules/@angular/*"
+        ]
+      }
+    },
+    "angularCompilerOptions": {
+      "strictTemplates": true
+    },
+    "include": [
+      "src/**/*.ts"
+    ]
+  }
+  

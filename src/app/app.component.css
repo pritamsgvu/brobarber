@@ -1,0 +1,101 @@
+/* General navbar styling */
+.navbar {
+  background-color: #333;
+  padding: 10px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px;
+}
+
+.navbar a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Menu toggle button (hamburger icon) */
+.menu-toggle {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Sidebar styling (hidden by default on larger screens) */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #333;
+  padding-top: 50px;
+  transition: left 0.3s ease-in-out;
+  z-index: 100;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 15px;
+  display: block;
+}
+
+.sidebar a:hover {
+  background-color: #555;
+}
+
+.sidebar .close-btn {
+  font-size: 2rem;
+  color: white;
+  background: none;
+  border: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+}
+
+/* Responsive media query for mobile view */
+@media (max-width: 768px) {
+  /* Show the hamburger menu on small screens */
+  .menu-toggle {
+    display: block;
+  }
+
+  /* Hide navbar links on small screens */
+  .navbar-links {
+    display: none;
+  }
+
+  /* Sidebar styling for mobile */
+  .sidebar.sidebar-open {
+    left: 0;
+  }
+
+  /* Ensure that the main content area is not hidden behind the sidebar */
+  body {
+    overflow: hidden;
+  }
+}
