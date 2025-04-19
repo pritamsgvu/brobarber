@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class BookingService {
-  private apiUrl = 'http://localhost:5000/api';
+  private apiUrl = 'https://brobarber-backend.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 

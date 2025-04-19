@@ -6,6 +6,6 @@ export class BarberService {
   constructor(private http: HttpClient) {}
 
   getBarbers() {
-    return this.http.get<any[]>('http://localhost:5000/api/barbers');
+    return this.http.get<any[]>('https://brobarber-backend.onrender.com/api/barbers');
   }
 }
