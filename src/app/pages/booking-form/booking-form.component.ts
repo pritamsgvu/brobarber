@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BarberService } from '../../services/barber.service';
 import { BookingService } from '../../services/booking.service';
 
@@ -13,6 +13,7 @@ export class BookingFormComponent implements OnInit {
   barbers: any[] = [];
   services: any[] = [];
   products: any[] = [];
+  filteredProducts: any[] = []; // Initially empty
 
   constructor(
     private fb: FormBuilder,
@@ -21,20 +22,54 @@ export class BookingFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // this.bookingForm = this.fb.group({
+    //   barberId: ['', Validators.required],
+    //   date: [this.getTodayDate(), Validators.required],
+    //   selectedServices: [[]], // Starts with no services selected
+    //   selectedProducts: [[]],
+    //   serviceAmount: ['', Validators.required],
+    //   paymentMode: ['cash', Validators.required],
+    //   totalProductAmount: [0]  // Keep track of total product amount
+    // });
+    const today = new Date().toISOString().split('T')[0];
     this.bookingForm = this.fb.group({
       barberId: ['', Validators.required],
-      date: ['', Validators.required],
-      selectedServices: [[]],
-      selectedProducts: [[]],
+      date: [today, Validators.required],
+      selectedServices: [[], this.atLeastOneSelected()],
+      selectedProducts: [[], this.atLeastOneSelected()],
       serviceAmount: ['', Validators.required],
+      discount: [0],
+      netTotal: [0],
       paymentMode: ['cash', Validators.required],
-      totalProductAmount: [0]  // Add this line to store the total product amount
+      totalProductAmount: [0],
     });
 
     this.loadBarbers();
     this.loadServices();
     this.loadProducts();
+
+    this.bookingForm.valueChanges.subscribe(() => {
+      this.updateNetTotal();
+    });
   }
+
+  atLeastOneSelected(): ValidatorFn {
+    return (control: AbstractControl) => {
+      const value = control.value;
+      return value && value.length > 0 ? null : { required: true };
+    };
+  }
+
+  // For validation display helper
+  isInvalid(field: string) {
+    const control = this.bookingForm.get(field);
+    return control && control.invalid && (control.dirty || control.touched);
+  }
+
+  // getTodayDate(): string {
+  //   const today = new Date();
+  //   return today.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+  // }
 
   loadBarbers() {
     this.barberService.getBarbers().subscribe(data => {
@@ -50,10 +85,9 @@ export class BookingFormComponent implements OnInit {
 
   loadProducts() {
     this.bookingService.getProducts().subscribe(data => {
-      this.products = data;
+      this.products = data;  // Load all products, we'll filter them based on selected services
     });
   }
-
 
   toggleCheckbox(event: any, field: string): void {
     const formArray = this.bookingForm.get(field)?.value || [];
@@ -69,23 +103,31 @@ export class BookingFormComponent implements OnInit {
     }
 
     this.bookingForm.get(field)?.markAsDirty();
+
+    // If services are selected or deselected, update the available products
+    if (field === 'selectedServices') {
+      this.onServiceChange();
+    }
   }
 
+  onServiceChange(): void {
+    const selectedServiceIds = this.bookingForm.get('selectedServices')?.value || [];
 
-  get selectedProducts(): FormArray {
-    return this.bookingForm.get('selectedProducts') as FormArray;
+    // Filter products that are linked to any of the selected services
+    this.filteredProducts = this.products.filter((product: any) => {
+      return product.services?.some((sid: string) => selectedServiceIds.includes(sid));
+    });
+    console.log('this.filtered', this.filteredProducts)
+
+    // Reset the selected products if they no longer match the filtered products
+    this.bookingForm.get('selectedProducts')?.setValue([]);
   }
-
-
-  // here
-
-  totalProductPrice = 0;
 
   toggleProductCheckbox(event: any, product: any): void {
     const selected = this.bookingForm.get('selectedProducts')?.value || [];
 
     if (event.target.checked) {
-      selected.push({ ...product });  // store full product object
+      selected.push({ ...product });  // Store full product object
     } else {
       const index = selected.findIndex((p: any) => p._id === product._id);
       if (index !== -1) selected.splice(index, 1);
@@ -121,21 +163,69 @@ export class BookingFormComponent implements OnInit {
   updateTotalProductAmount(): void {
     const selected = this.bookingForm.get('selectedProducts')?.value || [];
     const totalAmount = selected.reduce((sum: number, p: any) => sum + (p.perUsePrice || 0), 0);
-
+    const serviceCharge = selected.reduce((sum: number, s: any) => sum + (s.serviceCharge || 0), 0);
     this.bookingForm.get('totalProductAmount')?.setValue(totalAmount);  // Set the total product amount in the form
-    this.totalProductPrice = totalAmount;
+    this.bookingForm.get('serviceAmount')?.setValue(serviceCharge); // ✅ add this line
+
   }
 
+  updateNetTotal(): void {
+    const serviceAmount = this.bookingForm.get('serviceAmount')?.value || 0;
+    const totalProductAmount = this.bookingForm.get('totalProductAmount')?.value || 0;
+    const discount = this.bookingForm.get('discount')?.value || 0;
+
+    const netTotal = serviceAmount - (totalProductAmount + discount);
+
+    this.bookingForm.patchValue({
+      netTotal: netTotal
+    }, { emitEvent: false }); // Prevent triggering valueChanges again
+  }
 
 
   onSubmit() {
     if (this.bookingForm.valid) {
-      console.log('this.bookingForm.value', this.bookingForm.value)
+      console.log('this.bookingForm.value', this.bookingForm.value);
       this.bookingService.createBooking(this.bookingForm.value).subscribe(res => {
-
         alert('Booking Created!');
-        // this.bookingForm.reset();
+        this.resetBookingFields();
       });
     }
+    else {
+      console.log('here')
+      this.bookingForm.markAllAsTouched(); // Ensure all errors show on submit
+    }
   }
+
+  resetBookingFields(): void {
+    // Reset form fields
+    this.bookingForm.patchValue({
+      selectedServices: [],
+      selectedProducts: [],
+      serviceAmount: '',
+      totalProductAmount: 0,
+      discount: 0,
+    });
+
+    // Reset checkboxes (if you are storing manually in array or UI binding depends on helper functions)
+    const serviceCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+    serviceCheckboxes.forEach((checkbox: any) => {
+      checkbox.checked = false;
+    });
+
+    // Optional: reset filteredProducts if it depends on selectedServices
+    this.filteredProducts = [];
+
+    // Mark as pristine
+    this.bookingForm.get('selectedServices')?.markAsPristine();
+    this.bookingForm.get('selectedProducts')?.markAsPristine();
+    this.bookingForm.get('serviceAmount')?.markAsPristine();
+    this.bookingForm.get('discount')?.markAsPristine();
+
+    // Update validity
+    this.bookingForm.get('selectedServices')?.updateValueAndValidity();
+    this.bookingForm.get('selectedProducts')?.updateValueAndValidity();
+    this.bookingForm.get('serviceAmount')?.updateValueAndValidity();
+    this.bookingForm.get('discount')?.updateValueAndValidity();
+  }
+
 }

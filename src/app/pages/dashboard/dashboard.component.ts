@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
 
   totalIncome = 0;
   totalProductCost = 0;
+  serviceTotalAmount = 0;
 
   constructor(
     private dashboardService: DashboardService,
@@ -103,45 +104,51 @@ export class DashboardComponent implements OnInit {
     const incomeMap: any = {};
     const commissionMap: any = {};
     let productCost = 0;
-
+    let totalNetAmount = 0;
+    let serviceTotalAmount = 0;
+  
     const fromDate = this.filterForm.value.fromDate ? new Date(this.filterForm.value.fromDate) : null;
     const toDate = this.filterForm.value.toDate ? new Date(this.filterForm.value.toDate) : null;
-
+  
     this.filteredTransactions.forEach(tx => {
       const txDate = new Date(tx.date);
       if (fromDate && txDate < fromDate) return;
       if (toDate && txDate > toDate) return;
-
+  
       const name = tx.barberName;
-
+  
       if (!incomeMap[name]) {
         incomeMap[name] = 0;
         commissionMap[name] = 0;
       }
-
+  
       const serviceAmount = tx.serviceAmount || 0;
       const productAmount = tx.totalProductAmount || 0;
-
+      const netTotal = tx.netTotal || 0;
+  
       incomeMap[name] += serviceAmount;
-      commissionMap[name] += (serviceAmount - productAmount) * 0.5;
-
+      commissionMap[name] += netTotal * 0.5;
+  
       productCost += productAmount;
+      totalNetAmount += netTotal;
+      serviceTotalAmount += serviceAmount;
     });
-
-    // this.totalIncome = Object.values(incomeMap).reduce((acc: number, val: number) => acc + val, 0);
-    
+  
+    this.totalIncome = totalNetAmount / 2;
+    this.serviceTotalAmount = serviceTotalAmount;
     this.totalProductCost = productCost;
-
+  
     this.incomeStats = Object.keys(incomeMap).map(name => ({
       barberName: name,
       amount: incomeMap[name]
     }));
-
+  
     this.barberCommission = Object.keys(commissionMap).map(name => ({
       barberName: name,
       commission: commissionMap[name]
     }));
   }
+  
 
   // Load more data (lazy load)
   loadMore() {

@@ -2,10 +2,10 @@
   <div class="navbar-container">
     <button class="menu-toggle" (click)="toggleSidebar()">&#9776;</button>
     <div class="navbar-links">
-      <a routerLink="/login">Login</a>
-      <a routerLink="/admin">Admin</a>
+      <!-- <a routerLink="/login">Login</a>
+      <a routerLink="/admin">Admin</a> -->
       <a routerLink="/dashboard">Dashboard</a>
-      <a routerLink="/booking-form">Booking Form</a>
+      <a routerLink="/booking-form">Booking Entry</a>
       <a routerLink="/barbers">Barbers</a>
     </div>
   </div>
@@ -14,10 +14,10 @@
 <!-- Sidebar (only visible on mobile) -->
 <div class="sidebar" [ngClass]="{'sidebar-open': isSidebarOpen}">
   <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
-  <a routerLink="/login">Login</a>
-  <a routerLink="/admin">Admin</a>
+  <!-- <a routerLink="/login">Login</a>
+  <a routerLink="/admin">Admin</a> -->
   <a routerLink="/dashboard">Dashboard</a>
-  <a routerLink="/booking-form">Booking Form</a>
+  <a routerLink="/booking-form">Booking Entry</a>
   <a routerLink="/barbers">Barbers</a>
 </div>
 

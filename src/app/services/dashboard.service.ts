@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
-  private api = 'https://brobarber-backend.onrender.com/api';
+  private api = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -17,6 +18,7 @@ export class DashboardService {
     if (barber) params = params.set('barber', barber);
     return this.http.get<any[]>(`${this.api}/transactions`, { params });
   }
+
 
   getBookings(page: number, pageSize: number, filters: any): Observable<any[]> {
     let params = new HttpParams()

@@ -1,14 +1,22 @@
 <div class="booking-form-container">
-  <h2>Book an Appointment</h2>
+  <h2>Booking Entry</h2>
   <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+
     <label>Barber:</label>
     <select formControlName="barberId">
+      <option value="">Select Barber</option>
       <option *ngFor="let barber of barbers" [value]="barber._id">{{ barber.name }}</option>
     </select>
-  
+    <div *ngIf="bookingForm.get('barberId')?.touched && bookingForm.get('barberId')?.hasError('required')">
+      <small style="color: red;">Barber is required.</small>
+    </div>
+
     <label>Date:</label>
     <input type="date" formControlName="date" />
-  
+    <div *ngIf="bookingForm.get('date')?.touched && bookingForm.get('date')?.hasError('required')">
+      <small style="color: red;">Date is required.</small>
+    </div>
+
     <fieldset>
       <legend>Services</legend>
       <label *ngFor="let service of services">
@@ -16,41 +24,58 @@
         {{ service.serviceName }}
       </label>
     </fieldset>
-  
+    <!-- Optional: add required validation message if at least one service is required -->
+    <div *ngIf="isInvalid('selectedServices')">
+      <small style="color:red;">At least one service is required.</small>
+    </div>
+
     <fieldset>
       <legend>Products</legend>
-      <div *ngFor="let product of products">
-        <label>
+      <div *ngIf="filteredProducts.length > 0">
+        <div *ngFor="let product of filteredProducts">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="isProductSelected(product._id)"
+              (change)="toggleProductCheckbox($event, product)"
+            />
+            {{ product.productName }} | Service Charge: {{product.serviceCharge}}
+          </label>
+
           <input
-            type="checkbox"
-            [checked]="isProductSelected(product._id)"
-            (change)="toggleProductCheckbox($event, product)"
+            type="number"
+            [value]="getProductPrice(product._id)"
+            (input)="updateProductPrice(product._id, $event)"
+            [disabled]="!isProductSelected(product._id)"
+            placeholder="Per use price"
           />
-          {{ product.productName }}
-        </label>
-    
-        <input
-          type="number"
-          [value]="getProductPrice(product._id)"
-          (input)="updateProductPrice(product._id, $event)"
-          [disabled]="!isProductSelected(product._id)"
-          placeholder="Per use price"
-        />
+        </div>
       </div>
+      <p *ngIf="filteredProducts.length === 0">No products available for selected services.</p>
     </fieldset>
-    
-    <p><strong>Total Product Amount:</strong> {{ bookingForm.get('totalProductAmount')?.value }}</p>
-    
-    
-  
-  
+    <div *ngIf="isInvalid('selectedProducts')">
+      <small style="color:red;">At least one product is required.</small>
+    </div>
+
+    <p><strong>Product Amount:</strong> {{ bookingForm.get('totalProductAmount')?.value }} 
+    <strong>| Net Amount :</strong> {{ bookingForm.get('serviceAmount')?.value - ((bookingForm.get('totalProductAmount')?.value) + (bookingForm.get('discount')?.value)) }}</p>
+
     <label>Amount:</label>
     <input type="number" formControlName="serviceAmount" />
-  
+    <div *ngIf="bookingForm.get('serviceAmount')?.touched && bookingForm.get('serviceAmount')?.hasError('required')">
+      <small style="color: red;">Service amount is required.</small>
+    </div>
+
+    <label>Discount:</label>
+    <input type="number" formControlName="discount" />
+
     <label>Payment Mode:</label>
     <label><input type="radio" value="cash" formControlName="paymentMode" /> Cash</label>
     <label><input type="radio" value="online" formControlName="paymentMode" /> Online</label>
-  
+    <div *ngIf="bookingForm.get('paymentMode')?.touched && bookingForm.get('paymentMode')?.hasError('required')">
+      <small style="color: red;">Payment mode is required.</small>
+    </div>
+
     <button type="submit">Submit Booking</button>
   </form>
-  </div>
+</div>
