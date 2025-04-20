@@ -34,21 +34,13 @@
       <div *ngIf="filteredProducts.length > 0">
         <div *ngFor="let product of filteredProducts">
           <label>
-            <input
-              type="checkbox"
-              [checked]="isProductSelected(product._id)"
-              (change)="toggleProductCheckbox($event, product)"
-            />
+            <input type="checkbox" [checked]="isProductSelected(product._id)"
+              (change)="toggleProductCheckbox($event, product)" />
             {{ product.productName }} | Service Charge: {{product.serviceCharge}}
           </label>
 
-          <input
-            type="number"
-            [value]="getProductPrice(product._id)"
-            (input)="updateProductPrice(product._id, $event)"
-            [disabled]="!isProductSelected(product._id)"
-            placeholder="Per use price"
-          />
+          <input type="number" [value]="getProductPrice(product._id)" (input)="updateProductPrice(product._id, $event)"
+            [disabled]="!isProductSelected(product._id)" placeholder="Per use price" />
         </div>
       </div>
       <p *ngIf="filteredProducts.length === 0">No products available for selected services.</p>
@@ -57,11 +49,15 @@
       <small style="color:red;">At least one product is required.</small>
     </div>
 
-    <p><strong>Product Amount:</strong> {{ bookingForm.get('totalProductAmount')?.value }} 
-    <strong>| Net Amount :</strong> {{ bookingForm.get('serviceAmount')?.value - ((bookingForm.get('totalProductAmount')?.value) + (bookingForm.get('discount')?.value)) }}</p>
+    <p>
+      <strong>Product Amount:</strong> {{ bookingForm.getRawValue()?.totalProductAmount }}
+      <strong>| Net Amount :</strong> {{ bookingForm.getRawValue()?.netTotal }}
+      <strong>| Amount:</strong> {{ bookingForm.getRawValue()?.serviceAmount }}
+    </p>
+    
 
     <label>Amount:</label>
-    <input type="number" formControlName="serviceAmount" />
+    <input type="number" formControlName="serviceAmount" [attr.disabled]="true"/>
     <div *ngIf="bookingForm.get('serviceAmount')?.touched && bookingForm.get('serviceAmount')?.hasError('required')">
       <small style="color: red;">Service amount is required.</small>
     </div>

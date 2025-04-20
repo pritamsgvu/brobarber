@@ -8,7 +8,7 @@ import { BookingFormComponent } from './pages/booking-form/booking-form.componen
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'barbers', component: BarbersComponent },
   { path: 'dashboard', component: DashboardComponent },

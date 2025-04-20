@@ -113,15 +113,27 @@ export class BookingFormComponent implements OnInit {
   onServiceChange(): void {
     const selectedServiceIds = this.bookingForm.get('selectedServices')?.value || [];
 
-    // Filter products that are linked to any of the selected services
+    // Filter products based on selected services
     this.filteredProducts = this.products.filter((product: any) => {
       return product.services?.some((sid: string) => selectedServiceIds.includes(sid));
     });
-    console.log('this.filtered', this.filteredProducts)
 
-    // Reset the selected products if they no longer match the filtered products
+    // Reset product selections
     this.bookingForm.get('selectedProducts')?.setValue([]);
+
+    // 🟡 Update service amount
+    let totalServiceAmount = 0;
+    selectedServiceIds.forEach((serviceId: string) => {
+      const service = this.services.find(s => s._id === serviceId);
+      if (service) totalServiceAmount += service.price || 0;
+    });
+
+    this.bookingForm.get('serviceAmount')?.setValue(totalServiceAmount);
+
+    // 🟢 Optionally recalculate net total
+    this.updateNetTotal();
   }
+
 
   toggleProductCheckbox(event: any, product: any): void {
     const selected = this.bookingForm.get('selectedProducts')?.value || [];
@@ -169,29 +181,26 @@ export class BookingFormComponent implements OnInit {
 
   }
 
+
   updateNetTotal(): void {
     const serviceAmount = this.bookingForm.get('serviceAmount')?.value || 0;
-    const totalProductAmount = this.bookingForm.get('totalProductAmount')?.value || 0;
+    const productAmount = this.bookingForm.get('totalProductAmount')?.value || 0;
     const discount = this.bookingForm.get('discount')?.value || 0;
 
-    const netTotal = serviceAmount - (totalProductAmount + discount);
-
-    this.bookingForm.patchValue({
-      netTotal: netTotal
-    }, { emitEvent: false }); // Prevent triggering valueChanges again
+    const net = serviceAmount - (productAmount + discount);
+    this.bookingForm.get('netTotal')?.setValue(net >= 0 ? net : 0, { emitEvent: false });
   }
+
 
 
   onSubmit() {
     if (this.bookingForm.valid) {
-      console.log('this.bookingForm.value', this.bookingForm.value);
       this.bookingService.createBooking(this.bookingForm.value).subscribe(res => {
-        alert('Booking Created!');
+        alert('Booking entry successed! Enter next one.');
         this.resetBookingFields();
       });
     }
     else {
-      console.log('here')
       this.bookingForm.markAllAsTouched(); // Ensure all errors show on submit
     }
   }
