@@ -4,23 +4,45 @@
     <!-- Product Form -->
     <div class="form-section">
       <h3>{{ selectedProduct ? 'Edit Product' : 'Add New Product' }}</h3>
-      <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-        <input formControlName="productName" placeholder="Product Name" required />
-        <input formControlName="brand" placeholder="Brand" required />
-        <input type="number" formControlName="productPrice" placeholder="Product Price" />
-        <input type="number" formControlName="perUsePrice" placeholder="Per Use Price" />
-        <input type="number" formControlName="serviceCharge" placeholder="Service Charge" />
-  
-        <select formControlName="services" multiple>
-          <option *ngFor="let service of services" [value]="service._id">{{ service.serviceName }}</option>
-        </select>
-  
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+        <div class="form-group">
+          <label for="productName">Product Name</label>
+          <input id="productName" formControlName="productName" placeholder="Enter product name" required />
+        </div>
+      
+        <div class="form-group">
+          <label for="brand">Brand</label>
+          <input id="brand" formControlName="brand" placeholder="Enter brand name" required />
+        </div>
+      
+        <div class="form-group">
+          <label for="productPrice">Product Price</label>
+          <input id="productPrice" type="number" formControlName="productPrice" placeholder="Enter product price" />
+        </div>
+      
+        <div class="form-group">
+          <label for="perUsePrice">Per Use Price</label>
+          <input id="perUsePrice" type="number" formControlName="perUsePrice" placeholder="Enter per use price" />
+        </div>
+      
+        <div class="form-group">
+          <label for="serviceCharge">Service Charge</label>
+          <input id="serviceCharge" type="number" formControlName="serviceCharge" placeholder="Enter service charge" />
+        </div>
+      
+        <div class="form-group">
+          <label for="services">Associated Services</label>
+          <select id="services" formControlName="services" multiple>
+            <option *ngFor="let service of services" [value]="service._id">{{ service.serviceName }}</option>
+          </select>
+        </div>
+      
         <div class="form-buttons">
           <button type="submit">{{ selectedProduct ? 'Update' : 'Add Product' }}</button>
           <button type="button" class="cancel-btn" *ngIf="selectedProduct" (click)="resetForm()">Cancel</button>
         </div>
       </form>
-    </div>
+      
   
     <!-- Product List -->
     <div class="table-section">

@@ -1,112 +1,154 @@
 .dashboard-container {
-    padding: 1rem;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
-  h2 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-  }
-  
+  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.filter-form input,
+.filter-form select {
+  padding: 4px 6px;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.filter-form button {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  background-color: #2d7dd2;
+  color: white;
+  border-radius: 4px;
+}
+
+.summary-cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background-color: #f0f4f8;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 150px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f8f9fa;
+  text-align: left;
+}
+
+ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.load-more {
+  margin-top: 1rem;
+  padding: 8px 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
   .filter-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .filter-form label {
-    display: flex;
     flex-direction: column;
-    font-size: 0.9rem;
   }
-  
-  .filter-form input,
-  .filter-form select {
-    padding: 4px 6px;
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .filter-form button {
-    padding: 6px 12px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    border: none;
-    background-color: #2d7dd2;
-    color: white;
-    border-radius: 4px;
-  }
-  
+
   .summary-cards {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    flex-direction: column;
   }
-  
-  .card {
-    background-color: #f0f4f8;
-    padding: 1rem;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    flex: 1;
-    min-width: 150px;
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    font-size: 0.8rem;
   }
-  
-  .table-wrapper {
-    overflow-x: auto;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-  
-  th, td {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    vertical-align: top;
-  }
-  
-  th {
-    background-color: #f8f9fa;
-    text-align: left;
-  }
-  
-  ul {
-    margin: 0;
-    padding-left: 1rem;
-  }
-  
+
   .load-more {
-    margin-top: 1rem;
-    padding: 8px 16px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    width: 100%;
   }
-  
-  @media (max-width: 768px) {
-    .filter-form {
-      flex-direction: column;
-    }
-  
-    .summary-cards {
-      flex-direction: column;
-    }
-  
-    table, thead, tbody, th, td, tr {
-      font-size: 0.8rem;
-    }
-  
-    .load-more {
-      width: 100%;
-    }
-  }
-  
+}
+/* Basic Delete Button Styles */
+.delete-btn {
+  background-color: #ff4747; /* Red background */
+  color: white; /* White text */
+  font-size: 14px;
+  padding: 10px 20px; /* Padding for better size */
+  border: 1px solid #ff0000; /* Red border */
+  border-radius: 4px; /* Slightly rounded corners */
+  cursor: pointer;
+  text-align: center;
+  display: inline-block; /* To keep it as a button */
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect for delete button */
+.delete-btn:hover {
+  background-color: #e63636; /* Slightly darker red on hover */
+}
+
+/* Active button state (when clicked) */
+.delete-btn:active {
+  background-color: #d32f2f; /* Darker red when clicked */
+  border-color: #d32f2f; /* Matching border color */
+}
+
+/* Disabled button state */
+.delete-btn:disabled {
+  background-color: #f5b7b1; /* Light red */
+  color: #c7c7c7; /* Gray text */
+  cursor: not-allowed; /* Disabled cursor */
+  border: 1px solid #e6b0b0; /* Light red border */
+}
+
+/* Optional: Adding spacing between text and icon */
+.delete-btn i {
+  margin-right: 8px; /* Spacing between icon and text */
+}

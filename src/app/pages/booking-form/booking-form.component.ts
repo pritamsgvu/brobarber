@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BarberService } from '../../services/barber.service';
 import { BookingService } from '../../services/booking.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-booking-form',
@@ -18,7 +19,8 @@ export class BookingFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private barberService: BarberService,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private router: Router // inject here
   ) { }
 
   ngOnInit(): void {
@@ -114,9 +116,13 @@ export class BookingFormComponent implements OnInit {
     const selectedServiceIds = this.bookingForm.get('selectedServices')?.value || [];
 
     // Filter products based on selected services
+
     this.filteredProducts = this.products.filter((product: any) => {
-      return product.services?.some((sid: string) => selectedServiceIds.includes(sid));
+      const serviceLinks = product.services || [];
+      const serviceIds = serviceLinks.map((s: any) => typeof s === 'string' ? s : s._id);
+      return serviceIds.some((sid: string) => selectedServiceIds.includes(sid));
     });
+   
 
     // Reset product selections
     this.bookingForm.get('selectedProducts')?.setValue([]);
@@ -197,7 +203,8 @@ export class BookingFormComponent implements OnInit {
     if (this.bookingForm.valid) {
       this.bookingService.createBooking(this.bookingForm.value).subscribe(res => {
         alert('Booking entry successed! Enter next one.');
-        this.resetBookingFields();
+        this.router.navigate(['/dashboard']);
+        // this.resetBookingFields();
       });
     }
     else {

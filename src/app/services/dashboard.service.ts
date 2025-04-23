@@ -49,4 +49,10 @@ export class DashboardService {
   getBarbers() {
     return this.http.get<any[]>(`${this.api}/barbers`);
   }
+
+  deleteBooking(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.api}/transactions/${id}`);
+  }
+  
+  
 }
