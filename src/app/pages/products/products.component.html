@@ -1,0 +1,61 @@
+<div class="product-container">
+    <h2 class="heading">Product Management</h2>
+  
+    <!-- Product Form -->
+    <div class="form-section">
+      <h3>{{ selectedProduct ? 'Edit Product' : 'Add New Product' }}</h3>
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <input formControlName="productName" placeholder="Product Name" required />
+        <input formControlName="brand" placeholder="Brand" required />
+        <input type="number" formControlName="productPrice" placeholder="Product Price" />
+        <input type="number" formControlName="perUsePrice" placeholder="Per Use Price" />
+        <input type="number" formControlName="serviceCharge" placeholder="Service Charge" />
+  
+        <select formControlName="services" multiple>
+          <option *ngFor="let service of services" [value]="service._id">{{ service.serviceName }}</option>
+        </select>
+  
+        <div class="form-buttons">
+          <button type="submit">{{ selectedProduct ? 'Update' : 'Add Product' }}</button>
+          <button type="button" class="cancel-btn" *ngIf="selectedProduct" (click)="resetForm()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  
+    <!-- Product List -->
+    <div class="table-section">
+      <h3>Product List</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Price</th>
+            <th>Per Use</th>
+            <th>Service Charge</th>
+            <th>Services</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>{{ product.productName }}</td>
+            <td>{{ product.brand }}</td>
+            <td>{{ product.productPrice }}</td>
+            <td>{{ product.perUsePrice }}</td>
+            <td>{{ product.serviceCharge }}</td>
+            <td>
+              <ul>
+                <li *ngFor="let service of product.services">{{ service.serviceName }}</li>
+              </ul>
+            </td>
+            <td>
+              <button class="action-btn edit-btn" (click)="editProduct(product)">Edit</button>
+              <button class="action-btn delete-btn" (click)="deleteProduct(product._id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

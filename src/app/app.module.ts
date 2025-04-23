@@ -12,6 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { BarberService } from './services/barber.service';
 import { BookingFormComponent } from './pages/booking-form/booking-form.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ProductsComponent } from './pages/products/products.component';
 // import { ChartsModule } from 'ng2-charts'; // Importing ChartsModule
 
 
@@ -22,7 +23,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     AdminDashboardComponent,
     BarbersComponent,
     BookingFormComponent,
-    DashboardComponent
+    DashboardComponent,
+    ProductsComponent
   ],
   imports: [
     BrowserModule,

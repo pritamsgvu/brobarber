@@ -6,6 +6,7 @@ import { BarbersComponent } from './pages/barbers/barbers.component';
 import { AuthGuard } from './guards/auth.guard';
 import { BookingFormComponent } from './pages/booking-form/booking-form.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ProductsComponent } from './pages/products/products.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'barbers', component: BarbersComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'booking-form', component: BookingFormComponent },
+  { path: 'products', component: ProductsComponent },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] }
 ];
 
