@@ -1,0 +1,48 @@
+<div class="container my-4">
+    <h2 class="text-center mb-4">Charts</h2>
+  
+    <!-- Date Range Filter Section -->
+    <div class="d-flex justify-content-center mb-4">
+      <div class="form-group mx-2">
+        <label for="fromDate" class="form-label">From:</label>
+        <input type="date" id="fromDate" [(ngModel)]="fromDate" class="form-control" />
+      </div>
+      
+      <div class="form-group mx-2">
+        <label for="toDate" class="form-label">To:</label>
+        <input type="date" id="toDate" [(ngModel)]="toDate" class="form-control" />
+      </div>
+  
+      <button class="btn btn-primary align-self-end" (click)="applyDateRange()">Filter</button>
+    </div>
+  
+    <!-- Graphs Section -->
+    <div class="row">
+      <!-- Payment Mode Chart -->
+      <div class="col-md-4 mb-4">
+        <h4 class="text-center">Payment Mode: Cash vs Online</h4>
+        <canvas id="paymentModeChart" width="600" height="400"></canvas>
+      </div>
+  
+      <!-- Product Earnings Chart -->
+      <div class="col-md-4 mb-4">
+        <h4 class="text-center">Product-wise Earnings</h4>
+        <canvas id="productEarningsChart" width="600" height="400"></canvas>
+      </div>
+  
+      <!-- Service Earnings Chart -->
+      <div class="col-md-4 mb-4">
+        <h4 class="text-center">Service-wise Earnings</h4>
+        <canvas id="serviceEarningsChart" width="600" height="400"></canvas>
+      </div>
+    </div>
+  
+    <div class="row">
+      <!-- Barber Earnings Chart -->
+      <div class="col-md-4 mb-4">
+        <h4 class="text-center">Barber-wise Earnings</h4>
+        <canvas id="barberEarningsChart" width="600" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+  
