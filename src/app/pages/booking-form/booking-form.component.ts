@@ -195,9 +195,8 @@ export class BookingFormComponent implements OnInit {
   onSubmit() {
     if (this.bookingForm.valid) {
       this.bookingService.createBooking(this.bookingForm.value).subscribe(res => {
-        alert('Booking entry successed! Enter next one.');
+        alert('Booking entry successed!');
         this.router.navigate(['/dashboard']);
-        // this.resetBookingFields();
       });
     }
     else {
@@ -205,36 +204,5 @@ export class BookingFormComponent implements OnInit {
     }
   }
 
-  resetBookingFields(): void {
-    // Reset form fields
-    this.bookingForm.patchValue({
-      selectedServices: [],
-      selectedProducts: [],
-      serviceAmount: '',
-      totalProductAmount: 0,
-      discount: 0,
-    });
-
-    // Reset checkboxes (if you are storing manually in array or UI binding depends on helper functions)
-    const serviceCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-    serviceCheckboxes.forEach((checkbox: any) => {
-      checkbox.checked = false;
-    });
-
-    // Optional: reset filteredProducts if it depends on selectedServices
-    this.filteredProducts = [];
-
-    // Mark as pristine
-    this.bookingForm.get('selectedServices')?.markAsPristine();
-    this.bookingForm.get('selectedProducts')?.markAsPristine();
-    this.bookingForm.get('serviceAmount')?.markAsPristine();
-    this.bookingForm.get('discount')?.markAsPristine();
-
-    // Update validity
-    this.bookingForm.get('selectedServices')?.updateValueAndValidity();
-    this.bookingForm.get('selectedProducts')?.updateValueAndValidity();
-    this.bookingForm.get('serviceAmount')?.updateValueAndValidity();
-    this.bookingForm.get('discount')?.updateValueAndValidity();
-  }
 
 }
