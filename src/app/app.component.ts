@@ -9,7 +9,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
   isSidebarOpen = false;
 
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
+  isNavbarCollapsed = false;
+
+  toggleNavbar() {
+    this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
+
 }

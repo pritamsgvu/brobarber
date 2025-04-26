@@ -24,17 +24,10 @@ export class BookingFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.bookingForm = this.fb.group({
-    //   barberId: ['', Validators.required],
-    //   date: [this.getTodayDate(), Validators.required],
-    //   selectedServices: [[]], // Starts with no services selected
-    //   selectedProducts: [[]],
-    //   serviceAmount: ['', Validators.required],
-    //   paymentMode: ['cash', Validators.required],
-    //   totalProductAmount: [0]  // Keep track of total product amount
-    // });
     const today = new Date().toISOString().split('T')[0];
     this.bookingForm = this.fb.group({
+      customerName: [''],
+      mobileNumber: [''],
       barberId: ['', Validators.required],
       date: [today, Validators.required],
       selectedServices: [[], this.atLeastOneSelected()],

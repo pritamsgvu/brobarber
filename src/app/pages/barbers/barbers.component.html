@@ -1,6 +1,19 @@
-<h2>Barbers List</h2>
-<ul>
-  <li *ngFor="let barber of barbers">
-    <strong>{{ barber.name }}</strong> - {{ barber.mobile }}
-  </li>
-</ul>
+<div class="container my-4">
+  <h2 class="text-center mb-4">Barbers</h2>
+
+  <div class="card shadow rounded">
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label h6">Available Barbers:</label>
+        <ul class="list-group">
+          <li *ngFor="let barber of barbers" class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ barber.name }}</strong>
+            </div>
+            <span class="text-muted small">{{ barber.mobile }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

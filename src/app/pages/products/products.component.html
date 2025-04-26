@@ -1,83 +1,92 @@
-<div class="product-container">
-    <h2 class="heading">Product Management</h2>
-  
-    <!-- Product Form -->
-    <div class="form-section">
-      <h3>{{ selectedProduct ? 'Edit Product' : 'Add New Product' }}</h3>
-      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
-        <div class="form-group">
-          <label for="productName">Product Name</label>
-          <input id="productName" formControlName="productName" placeholder="Enter product name" required />
-        </div>
-      
-        <div class="form-group">
-          <label for="brand">Brand</label>
-          <input id="brand" formControlName="brand" placeholder="Enter brand name" required />
-        </div>
-      
-        <div class="form-group">
-          <label for="productPrice">Product Price</label>
-          <input id="productPrice" type="number" formControlName="productPrice" placeholder="Enter product price" />
-        </div>
-      
-        <div class="form-group">
-          <label for="perUsePrice">Per Use Price</label>
-          <input id="perUsePrice" type="number" formControlName="perUsePrice" placeholder="Enter per use price" />
-        </div>
-      
-        <div class="form-group">
-          <label for="serviceCharge">Service Charge</label>
-          <input id="serviceCharge" type="number" formControlName="serviceCharge" placeholder="Enter service charge" />
-        </div>
-      
-        <div class="form-group">
-          <label for="services">Associated Services</label>
-          <select id="services" formControlName="services" multiple>
-            <option *ngFor="let service of services" [value]="service._id">{{ service.serviceName }}</option>
-          </select>
-        </div>
-      
-        <div class="form-buttons">
-          <button type="submit">{{ selectedProduct ? 'Update' : 'Add Product' }}</button>
-          <button type="button" class="cancel-btn" *ngIf="selectedProduct" (click)="resetForm()">Cancel</button>
-        </div>
-      </form>
-      
-  
-    <!-- Product List -->
-    <div class="table-section">
-      <h3>Product List</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Price</th>
-            <th>Per Use</th>
-            <th>Service Charge</th>
-            <th>Services</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let product of products">
-            <td>{{ product.productName }}</td>
-            <td>{{ product.brand }}</td>
-            <td>{{ product.productPrice }}</td>
-            <td>{{ product.perUsePrice }}</td>
-            <td>{{ product.serviceCharge }}</td>
-            <td>
-              <ul>
-                <li *ngFor="let service of product.services">{{ service.serviceName }}</li>
-              </ul>
-            </td>
-            <td>
-              <button class="action-btn edit-btn" (click)="editProduct(product)">Edit</button>
-              <button class="action-btn delete-btn" (click)="deleteProduct(product._id)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Product Management</h2>
+
+  <!-- Product Form -->
+  <form class="row g-3" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div class="col-md-6">
+      <label for="productName" class="form-label">Product Name</label>
+      <input id="productName" formControlName="productName" class="form-control" placeholder="Enter product name" required />
+    </div>
+
+    <div class="col-md-6">
+      <label for="brand" class="form-label">Brand</label>
+      <input id="brand" formControlName="brand" class="form-control" placeholder="Enter brand name" required />
+    </div>
+
+    <div class="col-md-4">
+      <label for="productPrice" class="form-label">Product Price</label>
+      <input id="productPrice" type="number" formControlName="productPrice" class="form-control" placeholder="Enter product price" />
+    </div>
+
+    <div class="col-md-4">
+      <label for="perUsePrice" class="form-label">Per Use Price</label>
+      <input id="perUsePrice" type="number" formControlName="perUsePrice" class="form-control" placeholder="Enter per use price" />
+    </div>
+
+    <div class="col-md-4">
+      <label for="serviceCharge" class="form-label">Service Charge</label>
+      <input id="serviceCharge" type="number" formControlName="serviceCharge" class="form-control" placeholder="Enter service charge" />
+    </div>
+
+    <div class="col-12">
+      <label for="services" class="form-label">Associated Services</label>
+      <select id="services" formControlName="services" multiple class="form-select">
+        <option *ngFor="let service of services" [value]="service._id">{{ service.serviceName }}</option>
+      </select>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button type="submit" class="btn btn-primary">
+        {{ selectedProduct ? 'Update' : 'Add Product' }}
+      </button>
+      <button *ngIf="selectedProduct" type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+    </div>
+  </form>
+
+  <!-- Product List -->
+  <h2 class="mb-4 text-center">Product List</h2>
+  <div class="card mt-5">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Product</th>
+              <th>Brand</th>
+              <th>Price (₹)</th>
+              <th>Per Use (₹)</th>
+              <th>Service Charge (₹)</th>
+              <th>Associated Services</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ product.productName }}</td>
+              <td>{{ product.brand }}</td>
+              <td>{{ product.productPrice || '-' }}</td>
+              <td>{{ product.perUsePrice || '-' }}</td>
+              <td>{{ product.serviceCharge || '-' }}</td>
+              <td>
+                <ul class="mb-0 ps-3">
+                  <li *ngFor="let service of product.services">{{ service.serviceName }}</li>
+                </ul>
+              </td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-warning" (click)="editProduct(product)">Edit</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteProduct(product._id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="products.length === 0">
+              <td colspan="8" class="text-center text-muted">No products available.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-  
+</div>

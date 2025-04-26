@@ -1,77 +1,137 @@
-<div class="booking-form-container">
-  <h2>Booking Entry</h2>
-  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Booking Entry</h2>
+  <form class="row g-3" [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
 
-    <label>Barber:</label>
-    <select formControlName="barberId">
-      <option value="">Select Barber</option>
-      <option *ngFor="let barber of barbers" [value]="barber._id">{{ barber.name }}</option>
-    </select>
-    <div *ngIf="bookingForm.get('barberId')?.touched && bookingForm.get('barberId')?.hasError('required')">
-      <small style="color: red;">Barber is required.</small>
+    <!-- Customer Name -->
+    <div class="col-md-6">
+      <label for="name" class="form-label">Customer Name</label>
+      <input type="text" class="form-control" formControlName="customerName" id="name">
     </div>
 
-    <label>Date:</label>
-    <input type="date" formControlName="date" />
-    <div *ngIf="bookingForm.get('date')?.touched && bookingForm.get('date')?.hasError('required')">
-      <small style="color: red;">Date is required.</small>
+    <!-- Mobile Number -->
+    <div class="col-md-6">
+      <label for="mobile" class="form-label">Mobile Number</label>
+      <input type="text" class="form-control" formControlName="mobileNumber" id="mobile">
     </div>
 
-    <fieldset>
-      <legend>Services</legend>
-      <label *ngFor="let service of services">
-        <input type="checkbox" [value]="service._id" (change)="toggleCheckbox($event, 'selectedServices')" />
-        {{ service.serviceName }}
-      </label>
-    </fieldset>
-    <!-- Optional: add required validation message if at least one service is required -->
-    <div *ngIf="isInvalid('selectedServices')">
-      <small style="color:red;">At least one service is required.</small>
+    <!-- Barber Selection -->
+    <div class="col-md-6">
+      <label for="barber" class="form-label">Barber</label>
+      <select formControlName="barberId" class="form-select" id="barber">
+        <option *ngFor="let barber of barbers" [value]="barber._id">{{ barber.name }}</option>
+      </select>
+      <div *ngIf="bookingForm.get('barberId')?.touched && bookingForm.get('barberId')?.hasError('required')">
+        <small class="text-danger">Barber is required.</small>
+      </div>
     </div>
 
-    <fieldset>
-      <legend>Products</legend>
-      <div *ngIf="filteredProducts.length > 0">
-        <div *ngFor="let product of filteredProducts">
-          <label>
-            <input type="checkbox" [checked]="isProductSelected(product._id)"
+    <!-- Date -->
+    <div class="col-md-6">
+      <label for="date" class="form-label">Date</label>
+      <input type="date" class="form-control" formControlName="date" id="date">
+      <div *ngIf="bookingForm.get('date')?.touched && bookingForm.get('date')?.hasError('required')">
+        <small class="text-danger">Date is required.</small>
+      </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="col-md-6">
+      <fieldset class="form-control p-3" style="max-height: 600px; min-height: 500px; overflow-y: auto;">
+        <legend class="float-none w-auto">Services</legend>
+        <div class="form-check" *ngFor="let service of services">
+          <input class="form-check-input" type="checkbox" [value]="service._id"
+            (change)="toggleCheckbox($event, 'selectedServices')" />
+          <label class="form-check-label">{{ service.serviceName }}</label>
+        </div>
+        <div *ngIf="services.length === 0" class="text-muted text-center">No services available.</div>
+      </fieldset>
+      <div *ngIf="isInvalid('selectedServices')">
+        <small class="text-danger">At least one service is required.</small>
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <div class="col-md-6">
+      <fieldset class="border p-3 rounded" style="max-height: 600px; min-height: 500px; overflow-y: auto;">
+        <legend class="float-none w-auto">Products</legend>
+        <div *ngFor="let product of filteredProducts" class="mb-3">
+          <div class="form-check d-flex align-items-center">
+            <input class="form-check-input me-2" type="checkbox" [checked]="isProductSelected(product._id)"
               (change)="toggleProductCheckbox($event, product)" />
-            {{ product.productName }} | Service Charge: {{product.serviceCharge}}
-          </label>
-
-          <input type="number" [value]="getProductPrice(product._id)" (input)="updateProductPrice(product._id, $event)"
-            [disabled]="!isProductSelected(product._id)" placeholder="Per use price" />
+            <label class="form-check-label flex-grow-1">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="fw-semibold">{{ product.productName }}</span>
+                  <small class="text-muted">| Service Charge: ₹{{ product.serviceCharge }}</small>
+                </div>
+                <input class="form-control form-control-sm ms-3" style="width: 120px;" type="number"
+                  [value]="getProductPrice(product._id)" (input)="updateProductPrice(product._id, $event)"
+                  [disabled]="!isProductSelected(product._id)" placeholder="Per use price" />
+              </div>
+            </label>
+          </div>
+        </div>
+        <div *ngIf="filteredProducts.length === 0" class="text-muted text-center">
+          No products available for selected services.
+        </div>
+      </fieldset>
+      <div *ngIf="isInvalid('selectedProducts')" class="mt-2">
+        <small class="text-danger">At least one product is required.</small>
+      </div>
+    </div>
+    
+    <!-- Amount Display -->
+    <div class="col-12 mb-3">
+      <div class="border rounded p-3 bg-light">
+        <div class="d-flex flex-wrap justify-content-center gap-4 text-center fw-semibold">
+          <div>
+            <strong>Product Amount:</strong> ₹{{ bookingForm.getRawValue()?.totalProductAmount }}
+          </div>
+          <div>
+            <strong>Net Amount:</strong> ₹{{ bookingForm.getRawValue()?.netTotal }}
+          </div>
+          <div>
+            <strong>Service Amount:</strong> ₹{{ bookingForm.getRawValue()?.serviceAmount }}
+          </div>
         </div>
       </div>
-      <p *ngIf="filteredProducts.length === 0">No products available for selected services.</p>
-    </fieldset>
-    <div *ngIf="isInvalid('selectedProducts')">
-      <small style="color:red;">At least one product is required.</small>
     </div>
 
-    <p>
-      <strong>Product Amount:</strong> {{ bookingForm.getRawValue()?.totalProductAmount }}
-      <strong>| Net Amount :</strong> {{ bookingForm.getRawValue()?.netTotal }}
-      <strong>| Amount:</strong> {{ bookingForm.getRawValue()?.serviceAmount }}
-    </p>
-    
-
-    <label>Amount:</label>
-    <input type="number" formControlName="serviceAmount" [attr.disabled]="true"/>
-    <div *ngIf="bookingForm.get('serviceAmount')?.touched && bookingForm.get('serviceAmount')?.hasError('required')">
-      <small style="color: red;">Service amount is required.</small>
+    <!-- Amount (read-only) -->
+    <div class="col-md-4">
+      <label for="serviceAmount" class="form-label">Amount</label>
+      <input type="number" class="form-control" id="serviceAmount" formControlName="serviceAmount" />
+      <div *ngIf="bookingForm.get('serviceAmount')?.touched && bookingForm.get('serviceAmount')?.hasError('required')">
+        <small class="text-danger">Service amount is required.</small>
+      </div>
     </div>
 
-    <label>Discount:</label>
-    <input type="number" formControlName="discount" />
-
-    <label>Payment Mode:</label>
-    <label><input type="radio" value="cash" formControlName="paymentMode" /> Cash</label>
-    <label><input type="radio" value="online" formControlName="paymentMode" /> Online</label>
-    <div *ngIf="bookingForm.get('paymentMode')?.touched && bookingForm.get('paymentMode')?.hasError('required')">
-      <small style="color: red;">Payment mode is required.</small>
+    <!-- Discount -->
+    <div class="col-md-4">
+      <label for="discount" class="form-label">Discount</label>
+      <input type="number" class="form-control" id="discount" formControlName="discount" />
     </div>
 
-    <button type="submit">Submit Booking</button>
+    <!-- Payment Mode -->
+    <div class="col-md-4">
+      <label class="form-label d-block">Payment Mode</label>
+      <div class="form-check form-check-inline">
+        <input type="radio" class="form-check-input" id="cash" value="cash" formControlName="paymentMode" />
+        <label for="cash" class="form-check-label">Cash</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" class="form-check-input" id="online" value="online" formControlName="paymentMode" />
+        <label for="online" class="form-check-label">Online</label>
+      </div>
+      <div *ngIf="bookingForm.get('paymentMode')?.touched && bookingForm.get('paymentMode')?.hasError('required')">
+        <small class="text-danger">Payment mode is required.</small>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary mt-3">Submit Booking</button>
+    </div>
+
   </form>
 </div>
