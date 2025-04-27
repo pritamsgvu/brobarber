@@ -6,7 +6,14 @@
       <button (click)="addTodo()" class="btn btn-primary mt-2">Add Task</button>
     </div>
   
-    <div *ngIf="todos.length === 0" class="alert alert-info">No tasks to display</div>
+     <!-- loader --> 
+  <div *ngIf="loading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+    </div>
+  </div>
+
+  
+    <div *ngIf="todos.length === 0" class="alert alert-info">No pending tasks for today. And if you are watching this mesasge you are doing nothing. Do some thing new daily.</div>
   
     <ul class="list-group">
       <li *ngFor="let todo of todos" class="list-group-item d-flex justify-content-between align-items-center">

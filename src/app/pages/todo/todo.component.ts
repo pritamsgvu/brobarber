@@ -17,6 +17,7 @@ export class TodoComponent implements OnInit {
 
   todos: Todo[] = [];
   newTask: string = '';
+  loading : boolean = true;
 
   constructor(private todoService: TodoService) { }
 
@@ -27,6 +28,7 @@ export class TodoComponent implements OnInit {
   loadTodos(): void {
     this.todoService.getTodos().subscribe(todos => {
       this.todos = todos;
+      this.loading = false;
     });
   }
 
