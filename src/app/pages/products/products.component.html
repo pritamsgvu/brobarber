@@ -45,7 +45,14 @@
 
   <!-- Product List -->
   <h2 class="mb-4 text-center">Product List</h2>
-  <div class="card mt-5">
+
+   <!-- loader --> 
+   <div *ngIf="loading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+    </div>
+  </div>
+
+  <div *ngIf="!loading" class="card mt-5">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-bordered table-striped align-middle">
@@ -55,8 +62,9 @@
               <th>Product</th>
               <th>Brand</th>
               <th>Price (₹)</th>
-              <th>Per Use (₹)</th>
               <th>Service Charge (₹)</th>
+              <th>Per Use (₹)</th>
+              <th>Net Charge (₹)</th>
               <th>Associated Services</th>
               <th>Actions</th>
             </tr>
@@ -67,8 +75,9 @@
               <td>{{ product.productName }}</td>
               <td>{{ product.brand }}</td>
               <td>{{ product.productPrice || '-' }}</td>
-              <td>{{ product.perUsePrice || '-' }}</td>
               <td>{{ product.serviceCharge || '-' }}</td>
+              <td>{{ product.perUsePrice || '-' }}</td>
+              <td>{{ (product?.serviceCharge -  product?.perUsePrice)  || '-' }}</td>
               <td>
                 <ul class="mb-0 ps-3">
                   <li *ngFor="let service of product.services">{{ service.serviceName }}</li>

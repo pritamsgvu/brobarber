@@ -12,6 +12,7 @@ export class ProductsComponent implements OnInit {
   products: any[] = [];
   services: any[] = [];
   selectedProduct: any = null;
+  loading: boolean = true;
 
   constructor(private fb: FormBuilder, private productService: ProductService) {
     this.productForm = this.fb.group({
@@ -25,6 +26,7 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadProducts();
     this.loadServices();
   }
@@ -32,6 +34,7 @@ export class ProductsComponent implements OnInit {
   loadProducts() {
     this.productService.getProducts().subscribe(data => {
       this.products = data;
+      this.loading = false;
     });
   }
 
@@ -42,6 +45,7 @@ export class ProductsComponent implements OnInit {
   }
 
   onSubmit() {
+    this.loading = true;
     const data = this.productForm.value;
 
     if (this.selectedProduct) {
@@ -71,6 +75,7 @@ export class ProductsComponent implements OnInit {
 
   deleteProduct(id: string) {
     if (confirm('Are you sure you want to delete this product?')) {
+      this.loading = true;
       this.productService.deleteProduct(id).subscribe(() => {
         this.loadProducts();
       });
