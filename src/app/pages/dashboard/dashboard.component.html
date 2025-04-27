@@ -133,7 +133,7 @@
   </div>
 
   <!-- Load More Button -->
-  <div *ngIf="hasMore && loading" class="d-grid mt-3">
+  <div *ngIf="hasMore && !loading" class="d-grid mt-3">
     <button (click)="loadMore()" class="btn btn-info">Load More</button>
   </div>
 </div>
