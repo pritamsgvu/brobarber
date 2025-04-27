@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   barbers: any[] = [];
   incomeStats: any[] = [];
   page = 1;
-  pageSize = 10;
+  pageSize = 50;
   hasMore = true;
   noDataFound = false; // Flag to check if data is found
   filterForm!: FormGroup;
@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   serviceTotalAmount = 0;
   cashAmount: any;
   onlineAmount: any;
+  loading: boolean = true;
 
   constructor(
     private dashboardService: DashboardService,
@@ -50,6 +51,7 @@ export class DashboardComponent implements OnInit {
 
   // Load initial data like services, products, barbers
   loadInitialData() {
+    this.loading = true;
     this.dashboardService.getServices().subscribe(data => this.services = data);
     this.dashboardService.getProducts().subscribe(data => this.products = data);
     this.dashboardService.getBarbers().subscribe(data => this.barbers = data);
@@ -57,6 +59,7 @@ export class DashboardComponent implements OnInit {
 
   // Load bookings with pagination and filters applied
   loadBookings(reset = false) {
+    this.loading = true;
     if (reset) {
       this.page = 1;
       this.bookings = [];
@@ -70,6 +73,7 @@ export class DashboardComponent implements OnInit {
         if (!data || data.length === 0) {
           this.hasMore = false;
           this.noDataFound = true; // Set flag to true when no data is returned
+          this.loading = false;
           return;
         }
 
@@ -129,6 +133,7 @@ export class DashboardComponent implements OnInit {
 
   // Generate statistics for income, product cost, and commissions
   generateStats() {
+    this.loading = false;
     const incomeMap: any = {};
     const commissionMap: any = {};
     let productCost = 0;
