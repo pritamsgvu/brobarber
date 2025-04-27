@@ -174,11 +174,11 @@ export class DashboardComponent implements OnInit {
       totalNetAmount += netTotal;
       serviceTotalAmount += serviceAmount;
 
-      if (tx.paymentMode === 'Cash') {
-        cashAmount += netTotal;
+      if (tx.paymentMode === 'cash') {
+        cashAmount += serviceAmount;
         cashTransactions++; // Count transactions for cash
-      } else if (tx.paymentMode === 'Online') {
-        onlineAmount += netTotal;
+      } else if (tx.paymentMode === 'online') {
+        onlineAmount += serviceAmount;
         onlineTransactions++; // Count transactions for online
       }
     });
@@ -200,8 +200,11 @@ export class DashboardComponent implements OnInit {
     }));
 
     // Add the transaction count for cash and online
-    this.cashAmount = `₹${cashAmount} (${cashTransactions} Transaction${cashTransactions > 1 ? 's' : ''})`;
-    this.onlineAmount = `₹${onlineAmount} (${onlineTransactions} Transaction${onlineTransactions > 1 ? 's' : ''})`;
+    this.cashAmount = `${cashAmount} (${cashTransactions} Transaction${cashTransactions > 1 ? 's' : ''})`;
+    this.onlineAmount = `${onlineAmount} (${onlineTransactions} Transaction${onlineTransactions > 1 ? 's' : ''})`;
+
+    console.log('cashAmount', this.cashAmount)
+    console.log('onlineAmount',this.onlineAmount)
   }
 
   // Load more data (lazy load)
