@@ -38,11 +38,18 @@
     <div class="col-md-6">
       <fieldset class="form-control p-3" style="max-height: 600px; min-height: 500px; overflow-y: auto;">
         <legend class="float-none w-auto">Services</legend>
+         <!-- loader --> 
+        <div *ngIf="services.length == 0" class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+          </div>
+        </div>
+        <span *ngIf="services.length > 0">
         <div class="form-check" *ngFor="let service of services">
           <input class="form-check-input" type="checkbox" [value]="service._id"
             (change)="toggleCheckbox($event, 'selectedServices')" />
           <label class="form-check-label">{{ service.serviceName }}</label>
         </div>
+      </span>
         <div *ngIf="services.length === 0" class="text-muted text-center">No services available.</div>
       </fieldset>
       <div *ngIf="isInvalid('selectedServices')">

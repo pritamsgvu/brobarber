@@ -39,7 +39,7 @@
     <div class="spinner-border" role="status">
     </div>
   </div>
-  
+
   <!-- Summary Cards -->
   <div *ngIf="!loading" class="row g-3 mt-4">
     <div class="col-12 col-md-3">
@@ -120,7 +120,7 @@
   </div>
 
   <!-- Load More Button -->
-  <div *ngIf="hasMore" class="d-grid mt-3">
+  <div *ngIf="hasMore && loading" class="d-grid mt-3">
     <button (click)="loadMore()" class="btn btn-info">Load More</button>
   </div>
 </div>
