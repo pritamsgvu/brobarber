@@ -1,0 +1,32 @@
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">To-Do List</h2>
+  
+    <div class="mb-3">
+      <input [(ngModel)]="newTask" class="form-control" placeholder="Add a new task" />
+      <button (click)="addTodo()" class="btn btn-primary mt-2">Add Task</button>
+    </div>
+  
+    <div *ngIf="todos.length === 0" class="alert alert-info">No tasks to display</div>
+  
+    <ul class="list-group">
+      <li *ngFor="let todo of todos" class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between w-100">
+          <span [class.text-decoration-line-through]="todo.isCompleted">
+            {{ todo.task }}
+          </span>
+          <div class="text-muted me-2" style="font-size: 0.9em;">
+            Created at: {{ todo.createdAt }}
+          </div>
+        </div>
+        <div class="d-flex">
+          <button (click)="toggleCompletion(todo)" class="btn btn-success btn-sm me-2">
+            {{ todo.isCompleted ? 'Undo' : 'Complete' }}
+          </button>
+          <button (click)="deleteTodo(todo._id!)" class="btn btn-danger btn-sm">
+            Delete
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  

@@ -11,7 +11,10 @@ export class AppComponent implements OnInit {
   isSidebarOpen = false;
   isLoggedIn = false;
   isNavbarCollapsed = false;
+  barberMenuOpen: boolean = false;
+
   constructor(private router: Router) { }
+
   ngOnInit(): void {
     const userLoggedIn = localStorage.getItem('isLoggedIn');
     if (userLoggedIn == 'true') {
@@ -21,6 +24,10 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // Toggle the visibility of the Barber Management sub-menu
+  toggleBarberMenu() {
+    this.barberMenuOpen = !this.barberMenuOpen;
+  }
   toggleNavbar() {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }

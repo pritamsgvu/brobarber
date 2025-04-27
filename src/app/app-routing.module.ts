@@ -7,6 +7,8 @@ import { BookingFormComponent } from './pages/booking-form/booking-form.componen
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { ChartComponent } from './pages/chart/chart.component';
+import { ServiceComponent } from './pages/service/service.component';
+import { TodoComponent } from './pages/todo/todo.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -15,6 +17,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'booking-form', component: BookingFormComponent, canActivate: [AuthGuard] },
   { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
+  { path: 'service', component: ServiceComponent, canActivate: [AuthGuard] },
+  { path: 'todo', component: TodoComponent, canActivate: [AuthGuard] },
   { path: 'chart', component: ChartComponent, canActivate: [AuthGuard] },
 ];
 

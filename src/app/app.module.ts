@@ -14,6 +14,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { ChartComponent } from './pages/chart/chart.component';
 import { BaseChartDirective } from 'ng2-charts';
+import { ServiceComponent } from './pages/service/service.component';
+import { TodoComponent } from './pages/todo/todo.component';
 
 
 @NgModule({
@@ -25,6 +27,8 @@ import { BaseChartDirective } from 'ng2-charts';
     DashboardComponent,
     ProductsComponent,
     ChartComponent,
+    ServiceComponent,
+    TodoComponent,
   ],
   imports: [
     BrowserModule,

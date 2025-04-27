@@ -1,18 +1,88 @@
-<div class="container my-4">
-  <h2 class="text-center mb-4">Barbers</h2>
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Barber Management</h2>
 
-  <div class="card shadow rounded">
-    <div class="card-body">
-      <div class="mb-3">
-        <label class="form-label h6">Available Barbers:</label>
-        <ul class="list-group">
-          <li *ngFor="let barber of barbers" class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{{ barber.name }}</strong>
-            </div>
-            <span class="text-muted small">{{ barber.mobile }}</span>
-          </li>
-        </ul>
+  <!-- Barber Form -->
+  <form class="row g-3" [formGroup]="barberForm" (ngSubmit)="onSubmit()">
+    <div class="col-md-6">
+      <label for="name" class="form-label">Name</label>
+      <input id="name" formControlName="name" class="form-control" placeholder="Enter barber name" required />
+    </div>
+
+    <div class="col-md-6">
+      <label for="mobile" class="form-label">Mobile</label>
+      <input id="mobile" formControlName="mobile" class="form-control" placeholder="Enter mobile number" required />
+    </div>
+
+    <div class="col-md-6">
+      <label for="address" class="form-label">Address</label>
+      <input id="address" formControlName="address" class="form-control" placeholder="Enter address" />
+    </div>
+
+    <div class="col-md-6">
+      <label for="aadhar" class="form-label">Aadhar</label>
+      <input id="aadhar" formControlName="aadhar" class="form-control" placeholder="Enter Aadhar number" />
+    </div>
+
+    <div class="col-12">
+      <label for="photo" class="form-label">Photo URL</label>
+      <input id="photo" formControlName="photo" class="form-control" placeholder="Enter photo URL or upload" />
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button type="submit" class="btn btn-primary">
+        {{ selectedBarber ? 'Update' : 'Add Barber' }}
+      </button>
+      <button *ngIf="selectedBarber" type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+    </div>
+  </form>
+
+  <!-- Barber List -->
+  <h2 class="mb-4 text-center">Barber List</h2>
+
+   <!-- loader --> 
+   <div *ngIf="loading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+    </div>
+  </div>
+
+  <div *ngIf="!loading" class="card mt-5">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Address</th>
+              <th>Aadhar</th>
+              <th>Photo</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let barber of barbers; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ barber.name }}</td>
+              <td>{{ barber.mobile }}</td>
+              <td>{{ barber.address || '-' }}</td>
+              <td>{{ barber.aadhar || '-' }}</td>
+              <td>
+                <img *ngIf="barber.photo" [src]="barber.photo" alt="Barber Photo" width="50" height="50" class="rounded-circle" />
+                <span *ngIf="!barber.photo" class="text-muted">No Photo</span>
+              </td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-warning" (click)="editBarber(barber)">Edit</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteBarber(barber._id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="barbers.length === 0">
+              <td colspan="7" class="text-center text-muted">No barbers available.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

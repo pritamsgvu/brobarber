@@ -1,0 +1,55 @@
+<div class="container my-4">
+    <h2 class="text-center mb-4">{{ isEditing ? 'Update Service' : 'Add New Service' }}</h2>
+  
+    <form [formGroup]="serviceForm" (ngSubmit)="submitForm()" class="mb-5">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <input type="text" formControlName="serviceName" class="form-control" placeholder="Service Name">
+        </div>
+        <div class="col-md-4">
+          <input type="number" formControlName="servicePrice" class="form-control" placeholder="Service Price">
+        </div>
+        <div class="col-md-4">
+          <input type="text" formControlName="description" class="form-control" placeholder="Description">
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-dark">{{ isEditing ? 'Update' : 'Add' }} Service</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()" *ngIf="isEditing">Cancel</button>
+      </div>
+    </form>
+  
+    <h3 class="mb-3">Services List</h3>
+    <div *ngIf="loading" class="text-center">
+      <div class="spinner-border text-dark" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  
+    <table class="table table-striped table-bordered table-hover" *ngIf="!loading && services.length">
+      <thead class="table-dark">
+        <tr>
+          <th>Service Name</th>
+          <th>Price (₹)</th>
+          <th>Description</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let service of services">
+          <td>{{ service.serviceName }}</td>
+          <td>{{ service.servicePrice }}</td>
+          <td>{{ service.description }}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-primary me-2" (click)="editService(service)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteService(service._id!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="!loading && services.length === 0" class="text-center">
+      No services available.
+    </div>
+  </div>
+  

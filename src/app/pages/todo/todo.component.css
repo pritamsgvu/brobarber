@@ -1,0 +1,10 @@
+/* Adjust margin between buttons */
+.btn-sm {
+    margin-right: 10px; /* Adds space between Complete/Undo and Delete buttons */
+  }
+  
+  /* Optional: Add some space between tasks and createdAt field */
+  li {
+    margin-bottom: 10px;
+  }
+  

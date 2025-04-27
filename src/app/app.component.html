@@ -2,34 +2,48 @@
   <div class="container-fluid">
     <a class="navbar-brand text-white" routerLink="/">Bro Barber</a>
 
-    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" 
-      [attr.aria-expanded]="isNavbarCollapsed ? 'true' : 'false'" 
-      aria-controls="navbarNav" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()"
+      [attr.aria-expanded]="isNavbarCollapsed ? 'true' : 'false'" aria-controls="navbarNav"
+      aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div [ngClass]="{'collapse navbar-collapse': true, 'show': isNavbarCollapsed}" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link text-white mx-2" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a class="nav-link text-white mx-2" routerLink="/dashboard" routerLinkActive="active"
+            (click)="toggleNavbar()">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white mx-2" routerLink="/booking-form" routerLinkActive="active">Booking Entry</a>
+          <a class="nav-link text-white mx-2" routerLink="/booking-form" routerLinkActive="active"
+            (click)="toggleNavbar()">Booking Entry</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white mx-2" routerLink="/products" routerLinkActive="active">Product Management</a>
+          <a class="nav-link text-white mx-2" routerLink="/products" routerLinkActive="active"
+            (click)="toggleNavbar()">Products</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white mx-2" routerLink="/chart" routerLinkActive="active">Graph</a>
+          <a class="nav-link text-white mx-2" routerLink="/service" routerLinkActive="active"
+            (click)="toggleNavbar()">Services</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white mx-2" routerLink="/barbers" routerLinkActive="active">Barbers</a>
+          <a class="nav-link text-white mx-2" routerLink="/barbers" routerLinkActive="active"
+            (click)="toggleNavbar()">Barbers</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white mx-2" href="javascript:void(0)" (click)="logout()" routerLinkActive="active">Logout</a>
+          <a class="nav-link text-white mx-2" routerLink="/todo" routerLinkActive="active"
+            (click)="toggleNavbar()">Todo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white mx-2" routerLink="/chart" routerLinkActive="active"
+            (click)="toggleNavbar()">Graph</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white mx-2" href="javascript:void(0)" (click)="logout()"
+            routerLinkActive="active">Logout</a>
         </li>
       </ul>
-      
+
     </div>
   </div>
 </nav>
