@@ -100,6 +100,9 @@
           <div>
             <strong>Service Amount:</strong> ₹{{ bookingForm.getRawValue()?.serviceAmount }}
           </div>
+          <div>
+            <strong>Amount Received:</strong> ₹{{ bookingForm.getRawValue()?.serviceAmount - bookingForm.getRawValue()?.discount }}
+          </div>
         </div>
       </div>
     </div>

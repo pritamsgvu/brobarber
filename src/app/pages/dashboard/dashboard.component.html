@@ -97,9 +97,10 @@
           <th>Barber</th>
           <th>Services</th>
           <th>Products</th>
-          <th>Service ₹</th>
-          <th>Product ₹</th>
+          <th>Service Charge ₹</th>
           <th>Discount ₹</th>
+          <th>Amout Received ₹</th>
+          <th>Used Product Price ₹</th>
           <th>Net Total ₹</th>
           <th>Mode</th>
           <th>Delete</th>
@@ -120,8 +121,9 @@
             </ul>
           </td>
           <td>{{ txn.serviceAmount }}</td>
-          <td>{{ txn.totalProductAmount }}</td>
           <td>{{ txn.discount }}</td>
+          <td>{{ ( txn.serviceAmount - txn.discount ) }}</td>
+          <td>{{ txn.totalProductAmount }}</td>
           <td>{{ txn.netTotal }}</td>
           <td>{{ txn.paymentMode }}</td>
           <td>
