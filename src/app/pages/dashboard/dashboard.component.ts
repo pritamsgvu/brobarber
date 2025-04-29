@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   totalIncome = 0;
   totalProductCost = 0;
   serviceTotalAmount = 0;
+  totalDiscount = 0;
   cashAmount: any;
   onlineAmount: any;
   loading: boolean = true;
@@ -139,6 +140,7 @@ export class DashboardComponent implements OnInit {
     let productCost = 0;
     let totalNetAmount = 0;
     let serviceTotalAmount = 0;
+    let totalDiscount = 0;
     let cashAmount = 0;
     let onlineAmount = 0;
     let cashTransactions = 0;
@@ -166,6 +168,7 @@ export class DashboardComponent implements OnInit {
       const serviceAmount = tx.serviceAmount || 0;
       const productAmount = tx.totalProductAmount || 0;
       const netTotal = tx.netTotal || 0;
+      const discount = tx.discount || 0;
 
       incomeMap[name] += serviceAmount;
       commissionMap[name] += netTotal * 0.5;
@@ -173,6 +176,7 @@ export class DashboardComponent implements OnInit {
       productCost += productAmount;
       totalNetAmount += netTotal;
       serviceTotalAmount += serviceAmount;
+      totalDiscount += discount;
 
       if (tx.paymentMode === 'cash') {
         cashAmount += serviceAmount;
@@ -185,6 +189,7 @@ export class DashboardComponent implements OnInit {
 
     this.totalIncome = totalNetAmount / 2;
     this.serviceTotalAmount = serviceTotalAmount;
+    this.totalDiscount = totalDiscount;
     this.totalProductCost = productCost;
     this.cashAmount = cashAmount;
     this.onlineAmount = onlineAmount;

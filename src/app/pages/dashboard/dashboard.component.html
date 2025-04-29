@@ -51,7 +51,8 @@
           </li>
           <li *ngIf="cashAmount">Cash: ₹{{cashAmount}}</li>
           <li *ngIf="onlineAmount">Online: ₹{{onlineAmount}}</li>
-          <li *ngIf="serviceTotalAmount">Total: ₹{{serviceTotalAmount}}</li>
+          <li *ngIf="serviceTotalAmount">Service: ₹{{serviceTotalAmount}} | Discout: ₹{{totalDiscount}}</li>
+          <li *ngIf="serviceTotalAmount">Received Total: ₹{{(serviceTotalAmount - totalDiscount)}}</li>
         </ul>
       </div>
     </div>
