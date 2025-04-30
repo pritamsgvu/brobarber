@@ -179,10 +179,10 @@ export class DashboardComponent implements OnInit {
       totalDiscount += discount;
 
       if (tx.paymentMode === 'cash') {
-        cashAmount += serviceAmount;
+        cashAmount += (serviceAmount - discount);
         cashTransactions++; // Count transactions for cash
       } else if (tx.paymentMode === 'online') {
-        onlineAmount += serviceAmount;
+        onlineAmount += (serviceAmount - discount);
         onlineTransactions++; // Count transactions for online
       }
     });
