@@ -41,7 +41,7 @@
   </div>
 
   <!-- Summary Cards -->
-  <div *ngIf="!loading" class="row g-4 mt-4">
+  <div *ngIf="!loading && !noDataFound" class="row g-4 mt-4">
     <div class="col-12 col-sm-6 col-md-3">
       <div class="card custom-card text-center p-3">
         <h5 class="card-title mb-2">Total Collection</h5>
@@ -85,7 +85,7 @@
   </div>
 
   <!-- No Data Found -->
-  <div *ngIf="noDataFound" class="text-center text-muted my-4">
+  <div *ngIf="noDataFound" class="text-center text-muted custom-card my-4">
     <p>No transactions found for the selected filters.</p>
   </div>
 
