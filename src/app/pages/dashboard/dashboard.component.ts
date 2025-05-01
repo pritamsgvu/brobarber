@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   barbers: any[] = [];
   incomeStats: any[] = [];
   page = 1;
-  pageSize = 50;
+  pageSize = 600;
   hasMore = true;
   noDataFound = false; // Flag to check if data is found
   filterForm!: FormGroup;

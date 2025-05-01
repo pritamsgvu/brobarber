@@ -9,7 +9,7 @@ export class DashboardService {
 
   constructor(private http: HttpClient) {}
 
-  getTransactions(skip = 0, limit = 50, from = '', to = '', barber = '') {
+  getTransactions(skip = 0, limit = 600, from = '', to = '', barber = '') {
     let params = new HttpParams()
       .set('skip', skip)
       .set('limit', limit);
