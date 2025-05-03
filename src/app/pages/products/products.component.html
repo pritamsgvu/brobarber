@@ -51,7 +51,10 @@
     <div class="spinner-border" role="status">
     </div>
   </div>
-
+  <div class="text-end my-3">
+    <button class="btn btn-primary mb-3" (click)="downloadPdf()">Download Menu</button>
+  </div>
+  
   <div *ngIf="!loading" class="card mt-5">
     <div class="card-body p-0">
       <div class="table-responsive">
@@ -99,3 +102,23 @@
     </div>
   </div>
 </div>
+
+
+<div #menuContent style="position: absolute; left: -9999px; top: 0;">
+  <div style="padding: 20px; max-width: 800px; font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #f7f7f7, #e0e0e0); border: 1px solid #ccc;">
+    <h2 style="text-align: center; margin-bottom: 0;">Bro Barber</h2>
+    <p style="text-align: center;">Raj Complex, Raniganj, Araria | 📞 9876543210</p>
+    <h3 style="border-bottom: 1px solid #333; margin-top: 20px;">Price Menu</h3>
+
+    <div *ngFor="let group of groupedServices">
+      <h4 style="color: #444; margin-top: 15px;">{{ group.serviceName }}</h4>
+      <ul style="list-style: none; padding-left: 10px;">
+        <li *ngFor="let product of group.products">
+          - {{ product.productName }} ----- {{product.serviceCharge}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+

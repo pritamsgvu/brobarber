@@ -21,6 +21,7 @@
         "@angular/router": "^16.2.12",
         "chart.js": "^4.4.9",
         "express": "^4.18.2",
+        "html2pdf.js": "^0.10.3",
         "ng2-charts": "^8.0.0",
         "rxjs": "~7.8.1",
         "tslib": "^2.6.2",

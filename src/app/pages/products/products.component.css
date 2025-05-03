@@ -1,0 +1,124 @@
+/* Overall menu container */
+#menuContent {
+    font-family: 'Roboto', sans-serif; /* Clean modern font */
+    background-color: #f8f9fa; /* Light background for readability */
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border: 1px solid #e1e1e1; /* Light border */
+  }
+  
+  /* Heading styles */
+  h2 {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  
+  h3, h4 {
+    font-size: 22px;
+    color: #444;
+    font-weight: 500;
+    margin-top: 15px;
+    border-bottom: 2px solid #eee; /* Light border under sub-headings */
+    padding-bottom: 10px;
+  }
+  
+  h4 {
+    font-size: 18px;
+    color: #555;
+    margin-top: 10px;
+    padding-left: 10px;
+  }
+  
+  /* List styles for services and products */
+  ul {
+    list-style-type: none;
+    padding-left: 20px;
+  }
+  
+  li {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  li::before {
+    content: "•";
+    margin-right: 10px;
+    color: #007bff; /* Blue bullet points for better contrast */
+  }
+  
+  /* Styling for product list */
+  .product-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0; /* Subtle separator */
+  }
+  
+  .product-item:last-child {
+    border-bottom: none;
+  }
+  
+  .product-name {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .product-price {
+    font-weight: 500;
+    color: #007bff;
+  }
+  
+  /* Buttons styling */
+  button {
+    background-color: #007bff; /* Blue button for primary actions */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* For ensuring proper spacing of content in larger screens */
+  @media (max-width: 600px) {
+    #menuContent {
+      padding: 15px;
+    }
+  
+    h2 {
+      font-size: 24px;
+    }
+  
+    h3, h4 {
+      font-size: 18px;
+    }
+  
+    ul, .product-item {
+      padding-left: 10px;
+    }
+  
+    button {
+      width: 100%; /* Make button full width on smaller screens */
+    }
+  }
+  
