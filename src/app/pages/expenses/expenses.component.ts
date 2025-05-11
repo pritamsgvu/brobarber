@@ -25,7 +25,7 @@ export class ExpensesComponent implements OnInit {
     'others',
     'dueClearance',
   ];
-  
+
 
   // Filters
   filterKeyword: string = '';
@@ -40,7 +40,7 @@ export class ExpensesComponent implements OnInit {
     private fb: FormBuilder,
     private expenseService: ExpenseService,
     private barberService: BarberService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -103,9 +103,9 @@ export class ExpensesComponent implements OnInit {
     const keyword = this.filterKeyword.toLowerCase().trim();
     if (keyword) {
       data = data.filter(exp =>
-        (exp.notes?.toLowerCase().includes(keyword) ||
-         exp.expenseType.toLowerCase().includes(keyword) ||
-         (exp.barberId && this.getBarberName(exp.barberId).toLowerCase().includes(keyword)))
+      (exp.notes?.toLowerCase().includes(keyword) ||
+        exp.expenseType.toLowerCase().includes(keyword) ||
+        (exp.barberId && this.getBarberName(exp.barberId).toLowerCase().includes(keyword)))
       );
     }
 
@@ -136,6 +136,14 @@ export class ExpensesComponent implements OnInit {
     this.totalExpenseAmount = data.reduce((sum, exp) => sum + (exp.expenseAmount || 0), 0);
   }
 
+  formatDateForInput(date: string | Date): string {
+    const d = new Date(date);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
+
+
   submitForm(): void {
     if (this.expenseForm.invalid) return;
 
@@ -153,7 +161,7 @@ export class ExpensesComponent implements OnInit {
     if (formValue.expenseType === 'barberCommission' && formValue.barberId) {
       newExpense.barberId = formValue.barberId;
     }
-    
+
     if (this.isEditing && this.selectedExpense?._id) {
       this.updateExpense(this.selectedExpense._id, newExpense);
     } else {
@@ -187,7 +195,7 @@ export class ExpensesComponent implements OnInit {
   editExpense(expense: Expense): void {
     this.isEditing = true;
     this.selectedExpense = expense;
-    this.expenseForm.patchValue(expense);
+    this.expenseForm.patchValue({ ...expense, date: this.formatDateForInput(expense.date) });
   }
 
   deleteExpense(id: string): void {
