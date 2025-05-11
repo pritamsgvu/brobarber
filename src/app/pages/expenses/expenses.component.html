@@ -1,0 +1,129 @@
+<div class="container p-4">
+    <!-- FORM -->
+    <form [formGroup]="expenseForm" (ngSubmit)="submitForm()" class="mb-4 bg-white p-4 rounded shadow">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label>Amount</label>
+          <input type="number" formControlName="expenseAmount" class="form-control" />
+        </div>
+  
+        <div class="col-md-3">
+          <label>From Account</label>
+          <select formControlName="fromWhichAccount" class="form-select">
+            <option value="cash">Cash</option>
+            <option value="online">Online</option>
+          </select>
+        </div>
+  
+        <div class="col-md-3">
+            <label>Expense Type</label>
+            <select formControlName="expenseType" class="form-control">
+              <option value="">Select Expense Type</option>
+              <option *ngFor="let type of expenseTypes" [value]="type">
+                {{ type | titlecase}}
+              </option>
+            </select>
+        </div>
+  
+        <div class="col-md-3" *ngIf="expenseForm.get('expenseType')?.value === 'barberCommission'">
+          <label>Barber</label>
+          <select formControlName="barberId" class="form-select">
+            <option value="">Select Barber</option>
+            <option *ngFor="let barber of barbers" [value]="barber._id">{{ barber.name }}</option>
+          </select>
+        </div>
+  
+        <div class="col-md-3">
+          <label>Date</label>
+          <input type="date" formControlName="date" class="form-control" />
+        </div>
+  
+        <div class="col-md-6">
+          <label>Notes</label>
+          <input type="text" formControlName="notes" class="form-control" />
+        </div>
+  
+        <div class="col-md-3 d-flex align-items-end">
+          <button class="btn btn-primary me-2" type="submit">
+            {{ isEditing ? 'Update' : 'Add' }} Expense
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="resetForm()">Reset</button>
+        </div>
+      </div>
+    </form>
+  
+    <!-- FILTERS -->
+    <div class="card p-3 mb-3">
+      <div class="row g-3">
+        <div class="col-md-2">
+          <input [(ngModel)]="filterKeyword" (ngModelChange)="applyFilter()" class="form-control" placeholder="Search keyword" />
+        </div>
+        <div class="col-md-2">
+          <input type="date" [(ngModel)]="filterFromDate" (change)="applyFilter()" class="form-control" />
+        </div>
+        <div class="col-md-2">
+          <input type="date" [(ngModel)]="filterToDate" (change)="applyFilter()" class="form-control" />
+        </div>
+        <div class="col-md-2">
+          <select [(ngModel)]="filterExpenseType" (change)="applyFilter()" class="form-select">
+            <option value="">All Types</option>
+            <option value="barberCommission">Barber Commission</option>
+            <option value="rent">Rent</option>
+            <option value="electricity">Electricity</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select [(ngModel)]="filterBarberId" (change)="applyFilter()" class="form-select">
+            <option value="">All Barbers</option>
+            <option *ngFor="let barber of barbers" [value]="barber._id">{{ barber.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-outline-secondary" (click)="resetFilters()">Clear Filters</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- TOTAL -->
+    <div class="mb-2 fw-bold fs-5">
+      Total Expenses: ₹{{ totalExpenseAmount }}
+    </div>
+  
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Barber</th>
+            <th>From Account</th>
+            <th>Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="filteredExpenses.length > 0; else noData">
+          <tr *ngFor="let expense of filteredExpenses">
+            <td>{{ expense.date | date:'mediumDate' }}</td>
+            <td>₹{{ expense.expenseAmount }}</td>
+            <td>{{ expense.expenseType | titlecase }}</td>
+            <td>{{ getBarberName(expense.barberId || '') }}</td>
+            <td>{{ expense.fromWhichAccount | titlecase  }}</td>
+            <td>{{ expense.notes }}</td>
+            <td>
+              <button class="btn btn-sm btn-warning me-1" (click)="editExpense(expense)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteExpense(expense._id || '')">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noData>
+        <tr>
+          <td colspan="7" class="text-center">No expenses found.</td>
+        </tr>
+      </ng-template>
+    </div>
+  </div>
+  

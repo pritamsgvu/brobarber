@@ -208,8 +208,6 @@ export class DashboardComponent implements OnInit {
     this.cashAmount = `${cashAmount} (${cashTransactions} Transaction${cashTransactions > 1 ? 's' : ''})`;
     this.onlineAmount = `${onlineAmount} (${onlineTransactions} Transaction${onlineTransactions > 1 ? 's' : ''})`;
 
-    console.log('cashAmount', this.cashAmount)
-    console.log('onlineAmount',this.onlineAmount)
   }
 
   // Load more data (lazy load)

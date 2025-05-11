@@ -16,6 +16,7 @@ import { ChartComponent } from './pages/chart/chart.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { ServiceComponent } from './pages/service/service.component';
 import { TodoComponent } from './pages/todo/todo.component';
+import { ExpensesComponent } from './pages/expenses/expenses.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { TodoComponent } from './pages/todo/todo.component';
     ChartComponent,
     ServiceComponent,
     TodoComponent,
+    ExpensesComponent,
   ],
   imports: [
     BrowserModule,
