@@ -15,6 +15,7 @@ export class BookingFormComponent implements OnInit {
   services: any[] = [];
   products: any[] = [];
   filteredProducts: any[] = []; // Initially empty
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -115,7 +116,7 @@ export class BookingFormComponent implements OnInit {
       const serviceIds = serviceLinks.map((s: any) => typeof s === 'string' ? s : s._id);
       return serviceIds.some((sid: string) => selectedServiceIds.includes(sid));
     });
-   
+
 
     // Reset product selections
     this.bookingForm.get('selectedProducts')?.setValue([]);
@@ -194,7 +195,9 @@ export class BookingFormComponent implements OnInit {
 
   onSubmit() {
     if (this.bookingForm.valid) {
+      this.isLoading = true;
       this.bookingService.createBooking(this.bookingForm.value).subscribe(res => {
+        this.isLoading = false;
         alert('Booking entry successed!');
         this.router.navigate(['/dashboard']);
       });

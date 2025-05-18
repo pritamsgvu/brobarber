@@ -1,5 +1,13 @@
 <div class="container mt-4">
   <h2 class="text-center mb-4">Booking Entry</h2>
+
+  <!-- loader -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+    </div>
+  </div>
+
+  
   <form class="row g-3" [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
 
     <!-- Customer Name -->
@@ -38,18 +46,18 @@
     <div class="col-md-6">
       <fieldset class="form-control p-3" style="max-height: 600px; min-height: 500px; overflow-y: auto;">
         <legend class="float-none w-auto">Services</legend>
-         <!-- loader --> 
+        <!-- loader -->
         <div *ngIf="services.length == 0" class="d-flex justify-content-center">
           <div class="spinner-border" role="status">
           </div>
         </div>
         <span *ngIf="services.length > 0">
-        <div class="form-check" *ngFor="let service of services">
-          <input class="form-check-input" type="checkbox" [value]="service._id"
-            (change)="toggleCheckbox($event, 'selectedServices')" />
-          <label class="form-check-label">{{ service.serviceName }}</label>
-        </div>
-      </span>
+          <div class="form-check" *ngFor="let service of services">
+            <input class="form-check-input" type="checkbox" [value]="service._id"
+              (change)="toggleCheckbox($event, 'selectedServices')" />
+            <label class="form-check-label">{{ service.serviceName }}</label>
+          </div>
+        </span>
         <div *ngIf="services.length === 0" class="text-muted text-center">No services available.</div>
       </fieldset>
       <div *ngIf="isInvalid('selectedServices')">
@@ -86,7 +94,7 @@
         <small class="text-danger">At least one product is required.</small>
       </div>
     </div>
-    
+
     <!-- Amount Display -->
     <div class="col-12 mb-3">
       <div class="border rounded p-3 bg-light">
@@ -101,7 +109,8 @@
             <strong>Service Amount:</strong> ₹{{ bookingForm.getRawValue()?.serviceAmount }}
           </div>
           <div>
-            <strong>Amount Received:</strong> ₹{{ bookingForm.getRawValue()?.serviceAmount - bookingForm.getRawValue()?.discount }}
+            <strong>Amount Received:</strong> ₹{{ bookingForm.getRawValue()?.serviceAmount -
+            bookingForm.getRawValue()?.discount }}
           </div>
         </div>
       </div>
