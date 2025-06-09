@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  
+
   <form class="row g-3" [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
 
     <!-- Customer Name -->
@@ -142,10 +142,31 @@
         <input type="radio" class="form-check-input" id="online" value="online" formControlName="paymentMode" />
         <label for="online" class="form-check-label">Online</label>
       </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" class="form-check-input" id="bot" value="both" formControlName="paymentMode" />
+        <label for="both" class="form-check-label">Cash + Online</label>
+      </div>
       <div *ngIf="bookingForm.get('paymentMode')?.touched && bookingForm.get('paymentMode')?.hasError('required')">
         <small class="text-danger">Payment mode is required.</small>
       </div>
     </div>
+
+
+    <!-- Both -->
+   
+    <ng-container *ngIf="bookingForm.get('paymentMode')?.value == 'both'">
+
+      <div class="col-md-6">
+        <label for="cashA" class="form-label">Cash</label>
+        <input type="number" class="form-control" formControlName="cashAmount" id="cashA">
+      </div>
+
+      <div class="col-md-6">
+        <label for="onlineA" class="form-label">Online</label>
+        <input type="number" class="form-control" formControlName="onlineAmount" id="onlineA">
+      </div>
+
+    </ng-container>
 
     <!-- Submit Button -->
     <div class="col-12 text-end">

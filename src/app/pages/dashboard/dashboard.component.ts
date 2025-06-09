@@ -26,12 +26,14 @@ export class DashboardComponent implements OnInit {
   totalDiscount = 0;
   cashAmount: any;
   onlineAmount: any;
+  cashAmountInBoth: any;
+  onlineAmountInBoth: any;
   loading: boolean = true;
 
   constructor(
     private dashboardService: DashboardService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -143,8 +145,11 @@ export class DashboardComponent implements OnInit {
     let totalDiscount = 0;
     let cashAmount = 0;
     let onlineAmount = 0;
+    let cashAmountInBothTotal = 0;
+    let onlineAmountInBothTotal = 0;
     let cashTransactions = 0;
     let onlineTransactions = 0;
+    let bothTransactions = 0;
 
     const { fromDate, toDate, paymentMode } = this.filterForm.value;
     const from = fromDate ? new Date(fromDate) : null;
@@ -166,6 +171,8 @@ export class DashboardComponent implements OnInit {
       }
 
       const serviceAmount = tx.serviceAmount || 0;
+      const cashAmountInBoth = tx.cashAmount || 0;
+      const onlineAmountInBoth = tx.onlineAmount || 0;
       const productAmount = tx.totalProductAmount || 0;
       const netTotal = tx.netTotal || 0;
       const discount = tx.discount || 0;
@@ -176,6 +183,8 @@ export class DashboardComponent implements OnInit {
       productCost += productAmount;
       totalNetAmount += netTotal;
       serviceTotalAmount += serviceAmount;
+      cashAmountInBothTotal += cashAmountInBoth;
+      onlineAmountInBothTotal += onlineAmountInBoth;
       totalDiscount += discount;
 
       if (tx.paymentMode === 'cash') {
@@ -184,6 +193,8 @@ export class DashboardComponent implements OnInit {
       } else if (tx.paymentMode === 'online') {
         onlineAmount += (serviceAmount - discount);
         onlineTransactions++; // Count transactions for online
+      } else if (tx.paymentMode === 'both') {
+        bothTransactions++; // Count transactions for online
       }
     });
 
@@ -193,6 +204,8 @@ export class DashboardComponent implements OnInit {
     this.totalProductCost = productCost;
     this.cashAmount = cashAmount;
     this.onlineAmount = onlineAmount;
+    this.cashAmountInBoth = cashAmountInBothTotal;
+    this.onlineAmountInBoth = onlineAmountInBothTotal;
 
     this.incomeStats = Object.keys(incomeMap).map(name => ({
       barberName: name,
@@ -207,6 +220,8 @@ export class DashboardComponent implements OnInit {
     // Add the transaction count for cash and online
     this.cashAmount = `${cashAmount} (${cashTransactions} Transaction${cashTransactions > 1 ? 's' : ''})`;
     this.onlineAmount = `${onlineAmount} (${onlineTransactions} Transaction${onlineTransactions > 1 ? 's' : ''})`;
+    this.cashAmountInBoth = `${cashAmountInBothTotal} (${bothTransactions} Transaction${bothTransactions > 1 ? 's' : ''})`;
+    this.onlineAmountInBoth = `${onlineAmountInBothTotal} (${bothTransactions} Transaction${bothTransactions > 1 ? 's' : ''})`;
 
   }
 

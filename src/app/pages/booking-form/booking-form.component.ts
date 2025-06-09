@@ -38,6 +38,8 @@ export class BookingFormComponent implements OnInit {
       netTotal: [0],
       paymentMode: ['cash', Validators.required],
       totalProductAmount: [0],
+      cashAmount:[0],
+      onlineAmount:[0],
     });
 
     this.loadBarbers();

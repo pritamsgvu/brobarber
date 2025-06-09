@@ -1,6 +1,6 @@
 <div class="container my-4">
-  <h2 class="text-center mb-4">Transaction Dashboard</h2>
- 
+  <h2 class="text-center mb-4">Transaction Dashboard </h2>
+
   <!-- Filter Form -->
   <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="row g-3">
     <div class="col-12 col-md-3">
@@ -34,7 +34,7 @@
     </div>
   </form>
 
- <!-- loader --> 
+  <!-- loader -->
   <div *ngIf="loading" class="d-flex justify-content-center">
     <div class="spinner-border" role="status">
     </div>
@@ -51,26 +51,27 @@
           </li>
           <li *ngIf="cashAmount">Cash: ₹{{cashAmount}}</li>
           <li *ngIf="onlineAmount">Online: ₹{{onlineAmount}}</li>
+          <li *ngIf="onlineAmount">Both: ₹{{cashAmountInBoth}} + ₹{{onlineAmountInBoth}}</li>
           <li *ngIf="serviceTotalAmount">Service: ₹{{serviceTotalAmount}} | Discout: ₹{{totalDiscount}}</li>
           <li *ngIf="serviceTotalAmount">Received Total: ₹{{(serviceTotalAmount - totalDiscount)}}</li>
         </ul>
       </div>
     </div>
-  
+
     <div class="col-12 col-sm-6 col-md-3">
       <div class="card custom-card text-center p-3">
         <h5 class="card-title mb-2">Total Product Cost</h5>
         <div class="card-value">₹{{ totalProductCost }}</div>
       </div>
     </div>
-  
+
     <div class="col-12 col-sm-6 col-md-3">
       <div class="card custom-card text-center p-3">
         <h5 class="card-title mb-2">Total Income</h5>
         <div class="card-value">₹{{ totalIncome }}</div>
       </div>
     </div>
-  
+
     <div class="col-12 col-sm-6 col-md-3">
       <div class="card custom-card text-center p-3">
         <h5 class="card-title mb-2">Commission</h5>
@@ -101,7 +102,7 @@
           <th>Service Charge ₹</th>
           <th>Discount ₹</th>
           <th>Amout Received ₹</th>
-          <th>Used Product Price ₹</th>
+          <th>Product Price ₹</th>
           <th>Net Total ₹</th>
           <th>Mode</th>
           <th>Delete</th>
@@ -123,10 +124,13 @@
           </td>
           <td>{{ txn.serviceAmount }}</td>
           <td>{{ txn.discount }}</td>
-          <td>{{ ( txn.serviceAmount - txn.discount ) }}</td>
+          <td>{{ ( txn.serviceAmount - txn.discount ) }}
+            <span *ngIf="txn.paymentMode =='both'"> <span class="badge rounded-pill bg-info text-dark">Cash {{txn.cashAmount}} </span>&nbsp;<span
+                class="badge rounded-pill bg-warning text-dark">Online {{txn.onlineAmount}}</span></span>
+          </td>
           <td>{{ txn.totalProductAmount }}</td>
           <td>{{ txn.netTotal }}</td>
-          <td>{{ txn.paymentMode }}</td>
+          <td>{{ txn.paymentMode }} </td>
           <td>
             <button class="btn btn-danger btn-sm" (click)="deleteTransaction(txn._id)">Delete</button>
           </td>
