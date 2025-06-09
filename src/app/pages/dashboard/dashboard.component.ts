@@ -28,6 +28,9 @@ export class DashboardComponent implements OnInit {
   onlineAmount: any;
   cashAmountInBoth: any;
   onlineAmountInBoth: any;
+  cashAmountOnly: any;
+  onlineAmountOnly: any;
+  totalCashOnline: any;
   loading: boolean = true;
 
   constructor(
@@ -220,8 +223,12 @@ export class DashboardComponent implements OnInit {
     // Add the transaction count for cash and online
     this.cashAmount = `${cashAmount} (${cashTransactions} Transaction${cashTransactions > 1 ? 's' : ''})`;
     this.onlineAmount = `${onlineAmount} (${onlineTransactions} Transaction${onlineTransactions > 1 ? 's' : ''})`;
-    this.cashAmountInBoth = `${cashAmountInBothTotal} (${bothTransactions} Transaction${bothTransactions > 1 ? 's' : ''})`;
-    this.onlineAmountInBoth = `${onlineAmountInBothTotal} (${bothTransactions} Transaction${bothTransactions > 1 ? 's' : ''})`;
+    this.cashAmountInBoth = `${cashAmountInBothTotal} (${bothTransactions} Tns${bothTransactions > 1 ? 's' : ''})`;
+    this.onlineAmountInBoth = `${onlineAmountInBothTotal} (${bothTransactions} Tns${bothTransactions > 1 ? 's' : ''})`;
+
+    this.cashAmountOnly = `${cashAmount + cashAmountInBothTotal}`;
+    this.onlineAmountOnly = `${onlineAmount + onlineAmountInBothTotal}`;
+    this.totalCashOnline = `${Number(this.cashAmountOnly) + Number(this.onlineAmountOnly)}`;
 
   }
 

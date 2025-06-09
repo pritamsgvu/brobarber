@@ -44,7 +44,7 @@
   <div *ngIf="!loading && !noDataFound" class="row g-4 mt-4">
     <div class="col-12 col-sm-6 col-md-3">
       <div class="card custom-card text-center p-3">
-        <h5 class="card-title mb-2">Total Collection</h5>
+        <h5 class="card-title mb-2">Transaction</h5>
         <ul class="list-unstyled mb-0">
           <li *ngIf="serviceTotalAmount == 0">
             <div class="card-value">₹0</div>
@@ -60,8 +60,16 @@
 
     <div class="col-12 col-sm-6 col-md-3">
       <div class="card custom-card text-center p-3">
-        <h5 class="card-title mb-2">Total Product Cost</h5>
-        <div class="card-value">₹{{ totalProductCost }}</div>
+        <h5 class="card-title mb-2">Total Collection</h5>
+        <ul class="list-unstyled mb-0">
+          <li *ngIf="cashAmountOnly == 0">
+            <div class="card-value">₹0</div>
+          </li>
+          <li *ngIf="cashAmountOnly">Total Cash: ₹{{cashAmountOnly}}</li>
+          <li *ngIf="onlineAmountOnly">Total Online: ₹{{onlineAmountOnly}}</li>
+          <li *ngIf="onlineAmountOnly">Total: ₹ {{totalCashOnline}}</li>
+          <li *ngIf="totalProductCost">Total Product: ₹{{totalProductCost}}</li>
+        </ul>
       </div>
     </div>
 
