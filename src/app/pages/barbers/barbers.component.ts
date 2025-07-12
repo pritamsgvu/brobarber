@@ -29,7 +29,8 @@ export class BarbersComponent implements OnInit {
       mobile: ['', Validators.required],
       address: [''],
       aadhar: [''],
-      photo: ['']
+      photo: [''],
+      isActive: [false],
     });
   }
 
@@ -80,7 +81,8 @@ export class BarbersComponent implements OnInit {
       mobile: barber.mobile,
       address: barber.address,
       aadhar: barber.aadhar,
-      photo: barber.photo
+      photo: barber.photo,
+      isActive: barber.isActive,
     });
   }
 

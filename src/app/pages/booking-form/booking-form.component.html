@@ -26,7 +26,7 @@
     <div class="col-md-6">
       <label for="barber" class="form-label">Barber</label>
       <select formControlName="barberId" class="form-select" id="barber">
-        <option *ngFor="let barber of barbers" [value]="barber._id">{{ barber.name }}</option>
+        <option *ngFor="let barber of activeBarbers" [value]="barber._id">{{ barber.name }}</option>
       </select>
       <div *ngIf="bookingForm.get('barberId')?.touched && bookingForm.get('barberId')?.hasError('required')">
         <small class="text-danger">Barber is required.</small>

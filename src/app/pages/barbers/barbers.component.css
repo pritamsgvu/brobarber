@@ -1,0 +1,7 @@
+.switch-small .form-check-input {
+    transform: scale(0.75);
+  }
+
+  .switch-large .form-check-input {
+    transform: scale(1.5);
+  }

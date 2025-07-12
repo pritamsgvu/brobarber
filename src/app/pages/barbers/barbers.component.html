@@ -23,10 +23,19 @@
       <input id="aadhar" formControlName="aadhar" class="form-control" placeholder="Enter Aadhar number" />
     </div>
 
-    <div class="col-12">
+    <div class="col-md-6">
       <label for="photo" class="form-label">Photo URL</label>
       <input id="photo" formControlName="photo" class="form-control" placeholder="Enter photo URL or upload" />
     </div>
+
+    <div class="col-md-6 d-flex align-items-center mt-4">
+      <div class="form-check form-switch switch-large mt-4">
+        <label class="form-check-label ms-2" for="isActive">Activate</label>
+        <input class="form-check-input" type="checkbox" id="isActive" formControlName="isActive">
+      </div>
+    </div>
+    
+
 
     <div class="col-12 d-flex gap-2">
       <button type="submit" class="btn btn-primary">
@@ -57,6 +66,7 @@
               <th>Address</th>
               <th>Aadhar</th>
               <th>Photo</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -71,6 +81,7 @@
                 <img *ngIf="barber.photo" [src]="barber.photo" alt="Barber Photo" width="50" height="50" class="rounded-circle" />
                 <span *ngIf="!barber.photo" class="text-muted">No Photo</span>
               </td>
+              <td>{{barber.isActive =='true' ? 'Active' : 'Deactive'}}</td>
               <td>
                 <div class="d-flex gap-2">
                   <button class="btn btn-sm btn-warning" (click)="editBarber(barber)">Edit</button>
