@@ -1,239 +1,132 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardService } from 'src/app/services/dashboard.service';
-declare var Chart: any;
+import { ExpenseService } from '../../services/expense.service';
+import Chart from 'chart.js/auto';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import html2pdf from 'html2pdf.js';
+
+Chart.register(ChartDataLabels);
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit{
+export class ChartComponent implements OnInit {
+  chartRef!: Chart;
+  selectedYear!: number;
+  availableYears: number[] = [];
 
-  fromDate: string = '';
-  toDate: string = '';
-  transactions: any[] = [];
-  services: any[] = [];
-  products: any[] = [];
-  barbers: any[] = [];
-
-
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private expenseService: ExpenseService) {}
 
   ngOnInit() {
-    // Set default date range to the first day of the current month
-    // and last day of the current month
-    const today = new Date();
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-    // Format dates to 'YYYY-MM-DD' format
-    this.fromDate = this.formatDate(firstDayOfMonth);
-    this.toDate = this.formatDate(lastDayOfMonth);
-
-    // Fetch all necessary data initially
-    this.dashboardService.getServices().subscribe((data: any[]) => {
-      this.services = data;
-    });
-
-    this.dashboardService.getProducts().subscribe((data: any[]) => {
-      this.products = data;
-    });
-
-    this.dashboardService.getBarbers().subscribe((data: any[]) => {
-      this.barbers = data;
-    });
-
-    this.fetchData();
+    this.getMonthlyExpenses(); // fetch default (latest year) data
   }
 
-  applyDateRange() {
-    // Fetch data based on the selected date range
-    this.fetchData(this.fromDate, this.toDate);
-  }
-
-  fetchData(fromDate: string = '', toDate: string = '') {
-    this.dashboardService.getTransactions(0, 10, fromDate, toDate).subscribe((data: any[]) => {
-      this.transactions = data;
-      
-      // Once data is fetched, call the method to render your charts
-      this.renderCharts();
-    });
-  }
-
-  renderCharts() {
-    const paymentModes = this.getPaymentModeData(this.transactions);
-    const productEarnings = this.getProductEarningsData(this.transactions);
-    const serviceEarnings = this.getServiceEarningsData(this.transactions);
-    const barberEarnings = this.getBarberEarningsData(this.transactions);
-
-    // Now render the charts using Chart.js
-    this.createPaymentModeChart(paymentModes);
-    this.createProductEarningsChart(productEarnings);
-    this.createServiceEarningsChart(serviceEarnings);
-    this.createBarberEarningsChart(barberEarnings);
-  }
-
-  getPaymentModeData(transactions: any[]) {
-    let cash = 0;
-    let online = 0;
-
-    transactions.forEach(transaction => {
-      if (transaction.paymentMode === 'cash') {
-        cash += transaction.netTotal;
-      } else if (transaction.paymentMode === 'online') {
-        online += transaction.netTotal;
+  getMonthlyExpenses(year?: number) {
+    this.expenseService.getMonthlyEarningsWithYears(year).subscribe({
+      next: (data) => {
+        this.availableYears = data.availableYears;
+        this.selectedYear = year || this.availableYears[0];
+        this.createMonthlyEarningsChart(data.report);
+      },
+      error: (err) => {
+        console.error('Failed to fetch expenses:', err);
       }
     });
-
-    return { cash, online };
   }
 
-  getProductEarningsData(transactions: any[]) {
-    const productEarnings: any = {};
+  onYearChange() {
+    this.getMonthlyExpenses(this.selectedYear);
+  }
 
-    transactions.forEach(transaction => {
-      transaction.selectedProducts.forEach(productId => {
-        const productName = this.getProductNameById(productId);
-        if (!productEarnings[productName]) {
-          productEarnings[productName] = 0;
+  createMonthlyEarningsChart(monthlyData: any[]) {
+    const labels = monthlyData.map(item => {
+      const date = new Date(item.year, item.month - 1);
+      return date.toLocaleString('default', { month: 'short', year: 'numeric' });
+    });
+
+    const totalEarnings = monthlyData.map(item => item.totalEarnings);
+    const totalExpenses = monthlyData.map(item => item.totalExpenses);
+    const netProfit = monthlyData.map(item => item.netProfit);
+
+    if (this.chartRef) {
+      this.chartRef.destroy();
+    }
+
+    const ctx = document.getElementById('monthlyEarningsChart') as HTMLCanvasElement;
+
+    this.chartRef = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Earnings',
+            data: totalEarnings,
+            backgroundColor: '#4BC0C0'
+          },
+          {
+            label: 'Expenses',
+            data: totalExpenses,
+            backgroundColor: '#FF6384'
+          },
+          {
+            label: 'Net Profit',
+            data: netProfit,
+            backgroundColor: '#90EE90'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        aspectRatio: 2,
+        layout: {
+          padding: { top: 20 }
+        },
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: `Monthly Earnings vs Expenses - ${this.selectedYear}`
+          },
+          datalabels: {
+            display: true,
+            anchor: 'end',
+            align: 'top',
+            offset: -4,
+            color: '#000',
+            font: {
+              weight: 'bold',
+              size: 12
+            },
+            formatter: (value: number) => `₹${value.toLocaleString('en-IN')}`
+          }
         }
-        productEarnings[productName] += transaction.totalProductAmount;
-      });
-    });
-
-    return productEarnings;
-  }
-
-  getServiceEarningsData(transactions: any[]) {
-    const serviceEarnings: any = {};
-
-    transactions.forEach(transaction => {
-      transaction.selectedServices.forEach(serviceId => {
-        const serviceName = this.getServiceNameById(serviceId);
-        if (!serviceEarnings[serviceName]) {
-          serviceEarnings[serviceName] = 0;
-        }
-        serviceEarnings[serviceName] += transaction.serviceAmount;
-      });
-    });
-
-    return serviceEarnings;
-  }
-
-  getBarberEarningsData(transactions: any[]) {
-    const barberEarnings: any = {};
-
-    transactions.forEach(transaction => {
-      const barberName = this.getBarberNameById(transaction.barberId._id);
-      if (!barberEarnings[barberName]) {
-        barberEarnings[barberName] = 0;
-      }
-      barberEarnings[barberName] += transaction.netTotal;
-    });
-
-    return barberEarnings;
-  }
-
-  getProductNameById(productId: string) {
-    const product = this.products.find(p => p._id === productId);
-    return product ? product.name : 'Unknown Product';
-  }
-
-  getServiceNameById(serviceId: string) {
-    const service = this.services.find(s => s._id === serviceId);
-    return service ? service.name : 'Unknown Service';
-  }
-
-  getBarberNameById(barberId: string) {
-    const barber = this.barbers.find(b => b._id === barberId);
-    return barber ? barber.name : 'Unknown Barber';
-  }
-
-  createPaymentModeChart(paymentModes: { cash: number, online: number }) {
-    new Chart('paymentModeChart', {
-      type: 'pie',
-      data: {
-        labels: ['Cash', 'Online'],
-        datasets: [{
-          data: [paymentModes.cash, paymentModes.online],
-          backgroundColor: ['#36A2EB', '#FF6384'],
-        }]
       },
-      options: {
-        responsive: true,
-        aspectRatio: 1.5
-      }
+      plugins: [ChartDataLabels]
     });
   }
 
-  createProductEarningsChart(productEarnings: any) {
-    const labels = Object.keys(productEarnings);
-    const data = Object.values(productEarnings);
-
-    new Chart('productEarningsChart', {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Product Earnings',
-          data: data,
-          backgroundColor: '#4BC0C0',
-        }]
-      },
-      options: {
-        responsive: true,
-        aspectRatio: 1.5
-      }
-    });
+  downloadChartImage() {
+    const canvas = document.getElementById('monthlyEarningsChart') as HTMLCanvasElement;
+    const image = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = `monthly-earnings-${this.selectedYear}.png`;
+    link.click();
   }
 
-  createServiceEarningsChart(serviceEarnings: any) {
-    const labels = Object.keys(serviceEarnings);
-    const data = Object.values(serviceEarnings);
-
-    new Chart('serviceEarningsChart', {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Service Earnings',
-          data: data,
-          backgroundColor: '#FF9F40',
-        }]
-      },
-      options: {
-        responsive: true,
-        aspectRatio: 1.5
-      }
-    });
-  }
-
-  createBarberEarningsChart(barberEarnings: any) {
-    const labels = Object.keys(barberEarnings);
-    const data = Object.values(barberEarnings);
-
-    new Chart('barberEarningsChart', {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Barber Earnings',
-          data: data,
-          backgroundColor: '#FFCD56',
-        }]
-      },
-      options: {
-        responsive: true,
-        aspectRatio: 1.5
-      }
-    });
-  }
-
-  // Helper function to format date to 'YYYY-MM-DD'
-  formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  downloadChartPDF() {
+    const canvas = document.getElementById('monthlyEarningsChart') as HTMLCanvasElement;
+    const image = canvas.toDataURL('image/png');
+    html2pdf()
+      .from(`<div><h3>Monthly Earnings - ${this.selectedYear}</h3><img src="${image}" style="width:100%"/></div>`)
+      .set({
+        margin: 10,
+        filename: `monthly-earnings-${this.selectedYear}.pdf`,
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      })
+      .save();
   }
 }

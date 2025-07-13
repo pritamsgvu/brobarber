@@ -43,4 +43,14 @@ export class ExpenseService {
   deleteExpense(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  getMonthlyEarningsWithYears(year?: number) {
+    const params = year ? { params: { year: year.toString() } } : {};
+    return this.http.get<{ report: any[], availableYears: number[] }>(
+      `${this.apiUrl}/earnings-report`,
+      params
+    );
+  }
+  
+  
 }
