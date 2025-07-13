@@ -4,9 +4,10 @@ import { ExpenseService, Expense } from '../../services/expense.service';
 import { BarberService } from '../../services/barber.service';
 
 @Component({
-  selector: 'app-expenses',
-  templateUrl: './expenses.component.html',
-  styleUrls: ['./expenses.component.css']
+    selector: 'app-expenses',
+    templateUrl: './expenses.component.html',
+    styleUrls: ['./expenses.component.css'],
+    standalone: false
 })
 export class ExpensesComponent implements OnInit {
   expenseForm!: FormGroup;

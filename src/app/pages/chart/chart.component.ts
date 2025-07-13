@@ -7,9 +7,10 @@ import html2pdf from 'html2pdf.js';
 Chart.register(ChartDataLabels);
 
 @Component({
-  selector: 'app-chart',
-  templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.css']
+    selector: 'app-chart',
+    templateUrl: './chart.component.html',
+    styleUrls: ['./chart.component.css'],
+    standalone: false
 })
 export class ChartComponent implements OnInit {
   chartRef!: Chart;

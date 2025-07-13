@@ -4,8 +4,9 @@ import { AppComponent } from '../../app.component'; // import AppComponent
 
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html'
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    standalone: false
 })
 export class LoginComponent {
   username = '';

@@ -9,9 +9,10 @@ interface Todo {
 }
 
 @Component({
-  selector: 'app-todo',
-  templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css']
+    selector: 'app-todo',
+    templateUrl: './todo.component.html',
+    styleUrls: ['./todo.component.css'],
+    standalone: false
 })
 export class TodoComponent implements OnInit {
 

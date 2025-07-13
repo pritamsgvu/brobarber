@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BarberService } from 'src/app/services/barber.service';
 
 @Component({
-  selector: 'app-barbers',
-  templateUrl: './barbers.component.html',
-  styleUrls: ['./barbers.component.css']
+    selector: 'app-barbers',
+    templateUrl: './barbers.component.html',
+    styleUrls: ['./barbers.component.css'],
+    standalone: false
 })
 export class BarbersComponent implements OnInit {
   barberForm!: FormGroup;
