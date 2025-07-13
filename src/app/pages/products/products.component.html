@@ -31,7 +31,9 @@
     <div class="col-12">
       <label for="services" class="form-label">Associated Services</label>
       <select id="services" formControlName="services" multiple class="form-select">
-        <option *ngFor="let service of services" [value]="service._id">{{ service.serviceName }}</option>
+        @for (service of services; track service) {
+          <option [value]="service._id">{{ service.serviceName }}</option>
+        }
       </select>
     </div>
 
@@ -39,68 +41,80 @@
       <button type="submit" class="btn btn-primary">
         {{ selectedProduct ? 'Update' : 'Add Product' }}
       </button>
-      <button *ngIf="selectedProduct" type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      @if (selectedProduct) {
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      }
     </div>
   </form>
 
   <!-- Product List -->
   <h2 class="mb-4 text-center">Product List</h2>
 
-   <!-- loader --> 
-   <div *ngIf="loading" class="d-flex justify-content-center">
-    <div class="spinner-border" role="status">
+  <!-- loader -->
+  @if (loading) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+      </div>
     </div>
-  </div>
+  }
   <div class="text-end my-3">
     <button class="btn btn-primary mb-3" (click)="downloadPdf()">Download Menu</button>
   </div>
-  
-  <div *ngIf="!loading" class="card mt-5">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Product</th>
-              <th>Brand</th>
-              <th>Price (₹)</th>
-              <th>Service Charge (₹)</th>
-              <th>Per Use (₹)</th>
-              <th>Net Charge (₹)</th>
-              <th>Associated Services</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let product of products; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ product.productName }}</td>
-              <td>{{ product.brand }}</td>
-              <td>{{ product.productPrice || '-' }}</td>
-              <td>{{ product.serviceCharge || '-' }}</td>
-              <td>{{ product.perUsePrice || '-' }}</td>
-              <td>{{ (product?.serviceCharge -  product?.perUsePrice)  || '-' }}</td>
-              <td>
-                <ul class="mb-0 ps-3">
-                  <li *ngFor="let service of product.services">{{ service.serviceName }}</li>
-                </ul>
-              </td>
-              <td>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-sm btn-warning" (click)="editProduct(product)">Edit</button>
-                  <button class="btn btn-sm btn-danger" (click)="deleteProduct(product._id)">Delete</button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="products.length === 0">
-              <td colspan="8" class="text-center text-muted">No products available.</td>
-            </tr>
-          </tbody>
-        </table>
+
+  @if (!loading) {
+    <div class="card mt-5">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Brand</th>
+                <th>Price (₹)</th>
+                <th>Service Charge (₹)</th>
+                <th>Per Use (₹)</th>
+                <th>Net Charge (₹)</th>
+                <th>Associated Services</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (product of products; track product; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ product.productName }}</td>
+                  <td>{{ product.brand }}</td>
+                  <td>{{ product.productPrice || '-' }}</td>
+                  <td>{{ product.serviceCharge || '-' }}</td>
+                  <td>{{ product.perUsePrice || '-' }}</td>
+                  <td>{{ (product?.serviceCharge -  product?.perUsePrice)  || '-' }}</td>
+                  <td>
+                    <ul class="mb-0 ps-3">
+                      @for (service of product.services; track service) {
+                        <li>{{ service.serviceName }}</li>
+                      }
+                    </ul>
+                  </td>
+                  <td>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-sm btn-warning" (click)="editProduct(product)">Edit</button>
+                      <button class="btn btn-sm btn-danger" (click)="deleteProduct(product._id)">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+              @if (products.length === 0) {
+                <tr>
+                  <td colspan="8" class="text-center text-muted">No products available.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>
 
 
@@ -110,14 +124,18 @@
     <p style="text-align: center;">Raj Complex, Raniganj, Araria | 📞 7004424646</p>
     <h3 style="border-bottom: 1px solid #333; margin-top: 20px;">Price Menu</h3>
 
-    <div *ngFor="let group of groupedServices">
-      <h4 style="color: #444; margin-top: 15px;">{{ group.serviceName }}</h4>
-      <ul style="list-style: none; padding-left: 10px;">
-        <li *ngFor="let product of group.products">
-          - {{ product.productName }} ----- {{product.serviceCharge}}
-        </li>
-      </ul>
-    </div>
+    @for (group of groupedServices; track group) {
+      <div>
+        <h4 style="color: #444; margin-top: 15px;">{{ group.serviceName }}</h4>
+        <ul style="list-style: none; padding-left: 10px;">
+          @for (product of group.products; track product) {
+            <li>
+              - {{ product.productName }} ----- {{product.serviceCharge}}
+            </li>
+          }
+        </ul>
+      </div>
+    }
   </div>
 </div>
 

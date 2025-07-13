@@ -6,7 +6,9 @@
     <div class="col-md-4">
       <label for="yearSelect" class="form-label">Filter by Year</label>
       <select id="yearSelect" class="form-select" [(ngModel)]="selectedYear" (change)="onYearChange()">
-        <option *ngFor="let y of availableYears" [value]="y">{{ y }}</option>
+        @for (y of availableYears; track y) {
+          <option [value]="y">{{ y }}</option>
+        }
       </select>
     </div>
   </div>

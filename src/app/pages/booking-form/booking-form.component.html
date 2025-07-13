@@ -2,10 +2,12 @@
   <h2 class="text-center mb-4">Booking Entry</h2>
 
   <!-- loader -->
-  <div *ngIf="isLoading" class="d-flex justify-content-center">
-    <div class="spinner-border" role="status">
+  @if (isLoading) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+      </div>
     </div>
-  </div>
+  }
 
 
   <form class="row g-3" [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
@@ -26,20 +28,26 @@
     <div class="col-md-6">
       <label for="barber" class="form-label">Barber</label>
       <select formControlName="barberId" class="form-select" id="barber">
-        <option *ngFor="let barber of activeBarbers" [value]="barber._id">{{ barber.name }}</option>
+        @for (barber of activeBarbers; track barber) {
+          <option [value]="barber._id">{{ barber.name }}</option>
+        }
       </select>
-      <div *ngIf="bookingForm.get('barberId')?.touched && bookingForm.get('barberId')?.hasError('required')">
-        <small class="text-danger">Barber is required.</small>
-      </div>
+      @if (bookingForm.get('barberId')?.touched && bookingForm.get('barberId')?.hasError('required')) {
+        <div>
+          <small class="text-danger">Barber is required.</small>
+        </div>
+      }
     </div>
 
     <!-- Date -->
     <div class="col-md-6">
       <label for="date" class="form-label">Date</label>
       <input type="date" class="form-control" formControlName="date" id="date">
-      <div *ngIf="bookingForm.get('date')?.touched && bookingForm.get('date')?.hasError('required')">
-        <small class="text-danger">Date is required.</small>
-      </div>
+      @if (bookingForm.get('date')?.touched && bookingForm.get('date')?.hasError('required')) {
+        <div>
+          <small class="text-danger">Date is required.</small>
+        </div>
+      }
     </div>
 
     <!-- Services Section -->
@@ -47,52 +55,68 @@
       <fieldset class="form-control p-3" style="max-height: 600px; min-height: 500px; overflow-y: auto;">
         <legend class="float-none w-auto">Services</legend>
         <!-- loader -->
-        <div *ngIf="services.length == 0" class="d-flex justify-content-center">
-          <div class="spinner-border" role="status">
+        @if (services.length == 0) {
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+            </div>
           </div>
-        </div>
-        <span *ngIf="services.length > 0">
-          <div class="form-check" *ngFor="let service of services">
-            <input class="form-check-input" type="checkbox" [value]="service._id"
-              (change)="toggleCheckbox($event, 'selectedServices')" />
-            <label class="form-check-label">{{ service.serviceName }}</label>
-          </div>
-        </span>
-        <div *ngIf="services.length === 0" class="text-muted text-center">No services available.</div>
+        }
+        @if (services.length > 0) {
+          <span>
+            @for (service of services; track service) {
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [value]="service._id"
+                  (change)="toggleCheckbox($event, 'selectedServices')" />
+                <label class="form-check-label">{{ service.serviceName }}</label>
+              </div>
+            }
+          </span>
+        }
+        @if (services.length === 0) {
+          <div class="text-muted text-center">No services available.</div>
+        }
       </fieldset>
-      <div *ngIf="isInvalid('selectedServices')">
-        <small class="text-danger">At least one service is required.</small>
-      </div>
+      @if (isInvalid('selectedServices')) {
+        <div>
+          <small class="text-danger">At least one service is required.</small>
+        </div>
+      }
     </div>
 
     <!-- Products Section -->
     <div class="col-md-6">
       <fieldset class="border p-3 rounded" style="max-height: 600px; min-height: 500px; overflow-y: auto;">
         <legend class="float-none w-auto">Products</legend>
-        <div *ngFor="let product of filteredProducts" class="mb-3">
-          <div class="form-check d-flex align-items-center">
-            <input class="form-check-input me-2" type="checkbox" [checked]="isProductSelected(product._id)"
-              (change)="toggleProductCheckbox($event, product)" />
-            <label class="form-check-label flex-grow-1">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <span class="fw-semibold">{{ product.productName }}</span>
-                  <small class="text-muted">| Service Charge: ₹{{ product.serviceCharge }}</small>
+        @for (product of filteredProducts; track product) {
+          <div class="mb-3">
+            <div class="form-check d-flex align-items-center">
+              <input class="form-check-input me-2" type="checkbox" [checked]="isProductSelected(product._id)"
+                (change)="toggleProductCheckbox($event, product)" />
+              <label class="form-check-label flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="fw-semibold">{{ product.productName }}</span>
+                    <small class="text-muted">| Service Charge: ₹{{ product.serviceCharge }}</small>
+                  </div>
+                  <input class="form-control form-control-sm ms-3" style="width: 120px;" type="number"
+                    [value]="getProductPrice(product._id)" (input)="updateProductPrice(product._id, $event)"
+                    [disabled]="!isProductSelected(product._id)" placeholder="Per use price" />
                 </div>
-                <input class="form-control form-control-sm ms-3" style="width: 120px;" type="number"
-                  [value]="getProductPrice(product._id)" (input)="updateProductPrice(product._id, $event)"
-                  [disabled]="!isProductSelected(product._id)" placeholder="Per use price" />
-              </div>
-            </label>
+              </label>
+            </div>
           </div>
-        </div>
-        <div *ngIf="filteredProducts.length === 0" class="text-muted text-center">
-          No products available for selected services.
-        </div>
+        }
+        @if (filteredProducts.length === 0) {
+          <div class="text-muted text-center">
+            No products available for selected services.
+          </div>
+        }
       </fieldset>
-      <div *ngIf="isInvalid('selectedProducts')" class="mt-2">
-        <small class="text-danger">At least one product is required.</small>
-      </div>
+      @if (isInvalid('selectedProducts')) {
+        <div class="mt-2">
+          <small class="text-danger">At least one product is required.</small>
+        </div>
+      }
     </div>
 
     <!-- Amount Display -->
@@ -120,9 +144,11 @@
     <div class="col-md-4">
       <label for="serviceAmount" class="form-label">Amount</label>
       <input type="number" class="form-control" id="serviceAmount" formControlName="serviceAmount" />
-      <div *ngIf="bookingForm.get('serviceAmount')?.touched && bookingForm.get('serviceAmount')?.hasError('required')">
-        <small class="text-danger">Service amount is required.</small>
-      </div>
+      @if (bookingForm.get('serviceAmount')?.touched && bookingForm.get('serviceAmount')?.hasError('required')) {
+        <div>
+          <small class="text-danger">Service amount is required.</small>
+        </div>
+      }
     </div>
 
     <!-- Discount -->
@@ -146,27 +172,26 @@
         <input type="radio" class="form-check-input" id="bot" value="both" formControlName="paymentMode" />
         <label for="both" class="form-check-label">Cash + Online</label>
       </div>
-      <div *ngIf="bookingForm.get('paymentMode')?.touched && bookingForm.get('paymentMode')?.hasError('required')">
-        <small class="text-danger">Payment mode is required.</small>
-      </div>
+      @if (bookingForm.get('paymentMode')?.touched && bookingForm.get('paymentMode')?.hasError('required')) {
+        <div>
+          <small class="text-danger">Payment mode is required.</small>
+        </div>
+      }
     </div>
 
 
     <!-- Both -->
-   
-    <ng-container *ngIf="bookingForm.get('paymentMode')?.value == 'both'">
 
+    @if (bookingForm.get('paymentMode')?.value == 'both') {
       <div class="col-md-6">
         <label for="cashA" class="form-label">Cash</label>
         <input type="number" class="form-control" formControlName="cashAmount" id="cashA">
       </div>
-
       <div class="col-md-6">
         <label for="onlineA" class="form-label">Online</label>
         <input type="number" class="form-control" formControlName="onlineAmount" id="onlineA">
       </div>
-
-    </ng-container>
+    }
 
     <!-- Submit Button -->
     <div class="col-12 text-end">

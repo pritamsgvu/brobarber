@@ -3,7 +3,10 @@
     "compilerOptions": {
       "target": "es2015",
       "module": "es2015",
-      "lib": ["es2018", "dom"],
+      "lib": [
+        "es2018",
+        "dom"
+      ],
       "allowJs": true,
       "checkJs": false,
       "jsx": "react",
@@ -15,7 +18,7 @@
       "alwaysStrict": true,
       "skipLibCheck": true,
       "esModuleInterop": true,
-      "moduleResolution": "node",
+      "moduleResolution": "bundler",
       "resolveJsonModule": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,

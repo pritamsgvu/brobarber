@@ -34,67 +34,81 @@
         <input class="form-check-input" type="checkbox" id="isActive" formControlName="isActive">
       </div>
     </div>
-    
+
 
 
     <div class="col-12 d-flex gap-2">
       <button type="submit" class="btn btn-primary">
         {{ selectedBarber ? 'Update' : 'Add Barber' }}
       </button>
-      <button *ngIf="selectedBarber" type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      @if (selectedBarber) {
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      }
     </div>
   </form>
 
   <!-- Barber List -->
   <h2 class="mb-4 text-center">Barber List</h2>
 
-   <!-- loader --> 
-   <div *ngIf="loading" class="d-flex justify-content-center">
-    <div class="spinner-border" role="status">
-    </div>
-  </div>
-
-  <div *ngIf="!loading" class="card mt-5">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Mobile</th>
-              <th>Address</th>
-              <th>Aadhar</th>
-              <th>Photo</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let barber of barbers; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ barber.name }}</td>
-              <td>{{ barber.mobile }}</td>
-              <td>{{ barber.address || '-' }}</td>
-              <td>{{ barber.aadhar || '-' }}</td>
-              <td>
-                <img *ngIf="barber.photo" [src]="barber.photo" alt="Barber Photo" width="50" height="50" class="rounded-circle" />
-                <span *ngIf="!barber.photo" class="text-muted">No Photo</span>
-              </td>
-              <td>{{barber.isActive =='true' ? 'Active' : 'Deactive'}}</td>
-              <td>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-sm btn-warning" (click)="editBarber(barber)">Edit</button>
-                  <button class="btn btn-sm btn-danger" (click)="deleteBarber(barber._id)">Delete</button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="barbers.length === 0">
-              <td colspan="7" class="text-center text-muted">No barbers available.</td>
-            </tr>
-          </tbody>
-        </table>
+  <!-- loader -->
+  @if (loading) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
       </div>
     </div>
-  </div>
+  }
+
+  @if (!loading) {
+    <div class="card mt-5">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Address</th>
+                <th>Aadhar</th>
+                <th>Photo</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (barber of barbers; track barber; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ barber.name }}</td>
+                  <td>{{ barber.mobile }}</td>
+                  <td>{{ barber.address || '-' }}</td>
+                  <td>{{ barber.aadhar || '-' }}</td>
+                  <td>
+                    @if (barber.photo) {
+                      <img [src]="barber.photo" alt="Barber Photo" width="50" height="50" class="rounded-circle" />
+                    }
+                    @if (!barber.photo) {
+                      <span class="text-muted">No Photo</span>
+                    }
+                  </td>
+                  <td>{{barber.isActive =='true' ? 'Active' : 'Deactive'}}</td>
+                  <td>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-sm btn-warning" (click)="editBarber(barber)">Edit</button>
+                      <button class="btn btn-sm btn-danger" (click)="deleteBarber(barber._id)">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+              @if (barbers.length === 0) {
+                <tr>
+                  <td colspan="7" class="text-center text-muted">No barbers available.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
 </div>

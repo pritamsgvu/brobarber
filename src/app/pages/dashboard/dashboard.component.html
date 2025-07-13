@@ -15,7 +15,9 @@
       <label class="form-label">Barber:</label>
       <select formControlName="barber" class="form-select">
         <option value="">All</option>
-        <option *ngFor="let b of barbers" [value]="b._id">{{ b.name }}</option>
+        @for (b of barbers; track b) {
+          <option [value]="b._id">{{ b.name }}</option>
+        }
       </select>
     </div>
     <div class="col-12 col-md-3">
@@ -35,120 +37,161 @@
   </form>
 
   <!-- loader -->
-  <div *ngIf="loading" class="d-flex justify-content-center">
-    <div class="spinner-border" role="status">
+  @if (loading) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Summary Cards -->
-  <div *ngIf="!loading && !noDataFound" class="row g-4 mt-4">
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="card custom-card text-center p-3">
-        <h5 class="card-title mb-2">Transaction</h5>
-        <ul class="list-unstyled mb-0">
-          <li *ngIf="serviceTotalAmount == 0">
-            <div class="card-value">₹0</div>
-          </li>
-          <li *ngIf="cashAmount">Cash: ₹{{cashAmount}}</li>
-          <li *ngIf="onlineAmount">Online: ₹{{onlineAmount}}</li>
-          <li *ngIf="onlineAmount">Both: ₹{{cashAmountInBoth}} + ₹{{onlineAmountInBoth}}</li>
-          <li *ngIf="serviceTotalAmount">Service: ₹{{serviceTotalAmount}} | Discout: ₹{{totalDiscount}}</li>
-          <li *ngIf="serviceTotalAmount">Received Total: ₹{{(serviceTotalAmount - totalDiscount)}}</li>
-        </ul>
+  @if (!loading && !noDataFound) {
+    <div class="row g-4 mt-4">
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="card custom-card text-center p-3">
+          <h5 class="card-title mb-2">Transaction</h5>
+          <ul class="list-unstyled mb-0">
+            @if (serviceTotalAmount == 0) {
+              <li>
+                <div class="card-value">₹0</div>
+              </li>
+            }
+            @if (cashAmount) {
+              <li>Cash: ₹{{cashAmount}}</li>
+            }
+            @if (onlineAmount) {
+              <li>Online: ₹{{onlineAmount}}</li>
+            }
+            @if (onlineAmount) {
+              <li>Both: ₹{{cashAmountInBoth}} + ₹{{onlineAmountInBoth}}</li>
+            }
+            @if (serviceTotalAmount) {
+              <li>Service: ₹{{serviceTotalAmount}} | Discout: ₹{{totalDiscount}}</li>
+            }
+            @if (serviceTotalAmount) {
+              <li>Received Total: ₹{{(serviceTotalAmount - totalDiscount)}}</li>
+            }
+          </ul>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="card custom-card text-center p-3">
+          <h5 class="card-title mb-2">Total Collection</h5>
+          <ul class="list-unstyled mb-0">
+            @if (cashAmountOnly == 0) {
+              <li>
+                <div class="card-value">₹0</div>
+              </li>
+            }
+            @if (cashAmountOnly) {
+              <li>Total Cash: ₹{{cashAmountOnly}}</li>
+            }
+            @if (onlineAmountOnly) {
+              <li>Total Online: ₹{{onlineAmountOnly}}</li>
+            }
+            @if (onlineAmountOnly) {
+              <li>Total: ₹ {{totalCashOnline}}</li>
+            }
+            @if (totalProductCost) {
+              <li>Total Product: ₹{{totalProductCost}}</li>
+            }
+          </ul>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="card custom-card text-center p-3">
+          <h5 class="card-title mb-2">Total Income</h5>
+          <div class="card-value">₹{{ totalIncome }}</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="card custom-card text-center p-3">
+          <h5 class="card-title mb-2">Commission</h5>
+          <ul class="list-unstyled mb-0">
+            @if (barberCommission.length == 0) {
+              <li>
+                <div class="card-value">₹0</div>
+              </li>
+            }
+            @for (c of barberCommission; track c) {
+              <li>{{ c.barberName }}: ₹{{ c.commission }}</li>
+            }
+          </ul>
+        </div>
       </div>
     </div>
-
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="card custom-card text-center p-3">
-        <h5 class="card-title mb-2">Total Collection</h5>
-        <ul class="list-unstyled mb-0">
-          <li *ngIf="cashAmountOnly == 0">
-            <div class="card-value">₹0</div>
-          </li>
-          <li *ngIf="cashAmountOnly">Total Cash: ₹{{cashAmountOnly}}</li>
-          <li *ngIf="onlineAmountOnly">Total Online: ₹{{onlineAmountOnly}}</li>
-          <li *ngIf="onlineAmountOnly">Total: ₹ {{totalCashOnline}}</li>
-          <li *ngIf="totalProductCost">Total Product: ₹{{totalProductCost}}</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="card custom-card text-center p-3">
-        <h5 class="card-title mb-2">Total Income</h5>
-        <div class="card-value">₹{{ totalIncome }}</div>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="card custom-card text-center p-3">
-        <h5 class="card-title mb-2">Commission</h5>
-        <ul class="list-unstyled mb-0">
-          <li *ngIf="barberCommission.length == 0">
-            <div class="card-value">₹0</div>
-          </li>
-          <li *ngFor="let c of barberCommission">{{ c.barberName }}: ₹{{ c.commission }}</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  }
 
   <!-- No Data Found -->
-  <div *ngIf="noDataFound" class="text-center text-muted custom-card my-4">
-    <p>No transactions found for the selected filters.</p>
-  </div>
+  @if (noDataFound) {
+    <div class="text-center text-muted custom-card my-4">
+      <p>No transactions found for the selected filters.</p>
+    </div>
+  }
 
   <!-- Transaction Table -->
-  <div *ngIf="!noDataFound" class="table-responsive mt-4">
-    <table class="table table-bordered table-striped align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>Date</th>
-          <th>Barber</th>
-          <th>Services</th>
-          <th>Products</th>
-          <th>Service Charge ₹</th>
-          <th>Discount ₹</th>
-          <th>Amout Received ₹</th>
-          <th>Product Price ₹</th>
-          <th>Net Total ₹</th>
-          <th>Mode</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let txn of filteredTransactions">
-          <td>{{ txn.date | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ txn.barberName }}</td>
-          <td>
-            <ul class="mb-0">
-              <li *ngFor="let s of txn.serviceNames">{{ s }}</li>
-            </ul>
-          </td>
-          <td>
-            <ul class="mb-0">
-              <li *ngFor="let p of txn.productNames">{{ p }}</li>
-            </ul>
-          </td>
-          <td>{{ txn.serviceAmount }}</td>
-          <td>{{ txn.discount }}</td>
-          <td>{{ ( txn.serviceAmount - txn.discount ) }}
-            <span *ngIf="txn.paymentMode =='both'"> <span class="badge rounded-pill bg-info text-dark">Cash {{txn.cashAmount}} </span>&nbsp;<span
+  @if (!noDataFound) {
+    <div class="table-responsive mt-4">
+      <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Date</th>
+            <th>Barber</th>
+            <th>Services</th>
+            <th>Products</th>
+            <th>Service Charge ₹</th>
+            <th>Discount ₹</th>
+            <th>Amout Received ₹</th>
+            <th>Product Price ₹</th>
+            <th>Net Total ₹</th>
+            <th>Mode</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (txn of filteredTransactions; track txn) {
+            <tr>
+              <td>{{ txn.date | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ txn.barberName }}</td>
+              <td>
+                <ul class="mb-0">
+                  @for (s of txn.serviceNames; track s) {
+                    <li>{{ s }}</li>
+                  }
+                </ul>
+              </td>
+              <td>
+                <ul class="mb-0">
+                  @for (p of txn.productNames; track p) {
+                    <li>{{ p }}</li>
+                  }
+                </ul>
+              </td>
+              <td>{{ txn.serviceAmount }}</td>
+              <td>{{ txn.discount }}</td>
+              <td>{{ ( txn.serviceAmount - txn.discount ) }}
+                @if (txn.paymentMode =='both') {
+                  <span> <span class="badge rounded-pill bg-info text-dark">Cash {{txn.cashAmount}} </span>&nbsp;<span
                 class="badge rounded-pill bg-warning text-dark">Online {{txn.onlineAmount}}</span></span>
-          </td>
-          <td>{{ txn.totalProductAmount }}</td>
-          <td>{{ txn.netTotal }}</td>
-          <td>{{ txn.paymentMode }} </td>
-          <td>
-            <button class="btn btn-danger btn-sm" (click)="deleteTransaction(txn._id)">Delete</button>
-          </td>
-        </tr>
+              }
+            </td>
+            <td>{{ txn.totalProductAmount }}</td>
+            <td>{{ txn.netTotal }}</td>
+            <td>{{ txn.paymentMode }} </td>
+            <td>
+              <button class="btn btn-danger btn-sm" (click)="deleteTransaction(txn._id)">Delete</button>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
+}
 
-  <!-- Load More Button -->
-  <div *ngIf="hasMore && !loading" class="d-grid mt-3">
+<!-- Load More Button -->
+@if (hasMore && !loading) {
+  <div class="d-grid mt-3">
     <button (click)="loadMore()" class="btn btn-info">Load More</button>
   </div>
+}
 </div>
