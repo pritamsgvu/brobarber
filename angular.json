@@ -55,22 +55,22 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "brobarber:build",
-            "hmr": true
+            "hmr": true,
+            "buildTarget": "brobarber:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "brobarber:build:production"
+              "buildTarget": "brobarber:build:production"
             },
             "development": {
-              "browserTarget": "brobarber:build:development"
+              "buildTarget": "brobarber:build:development"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "brobarber:build"
+            "buildTarget": "brobarber:build"
           }
         },
         "test": {
