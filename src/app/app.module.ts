@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,28 +19,21 @@ import { TodoComponent } from './pages/todo/todo.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    BarbersComponent,
-    BookingFormComponent,
-    DashboardComponent,
-    ProductsComponent,
-    ChartComponent,
-    ServiceComponent,
-    TodoComponent,
-    ExpensesComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    BaseChartDirective
-  ],
-  providers: [AuthGuard, BarberService],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        LoginComponent,
+        BarbersComponent,
+        BookingFormComponent,
+        DashboardComponent,
+        ProductsComponent,
+        ChartComponent,
+        ServiceComponent,
+        TodoComponent,
+        ExpensesComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        BaseChartDirective], providers: [AuthGuard, BarberService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
