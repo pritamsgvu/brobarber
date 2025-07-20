@@ -1,12 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppComponent } from '../../app.component'; // import AppComponent
-
-
+import { AppComponent } from '../../app.component';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    standalone: false
+    imports: [CommonModule, FormsModule]
 })
 export class LoginComponent {
   username = '';

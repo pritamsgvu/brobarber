@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BarberService } from 'src/app/services/barber.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BarberService } from '../../core/services/barber.service';
 
 @Component({
-    selector: 'app-barbers',
-    templateUrl: './barbers.component.html',
-    styleUrls: ['./barbers.component.css'],
-    standalone: false
+  selector: 'app-barbers',
+  templateUrl: './barbers.component.html',
+  styleUrls: ['./barbers.component.css'],
+  imports: [ReactiveFormsModule]
 })
 export class BarbersComponent implements OnInit {
   barberForm!: FormGroup;
@@ -17,7 +17,7 @@ export class BarbersComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private barberService: BarberService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();

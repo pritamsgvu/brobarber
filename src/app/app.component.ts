@@ -1,11 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+  imports: [RouterOutlet, RouterModule, ReactiveFormsModule, CommonModule, FormsModule],
+
 })
 export class AppComponent implements OnInit {
   isSidebarOpen = false;
@@ -34,7 +39,7 @@ export class AppComponent implements OnInit {
 
   logout() {
     localStorage.setItem('isLoggedIn', 'false');
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
     this.isLoggedIn = false;
   }
 

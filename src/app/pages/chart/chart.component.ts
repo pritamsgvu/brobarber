@@ -1,27 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpenseService } from '../../services/expense.service';
+import { ExpenseService } from '../../core/services/expense.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import html2pdf from 'html2pdf.js';
+// import html2pdf from 'html2pdf.js';
 
 Chart.register(ChartDataLabels);
 
 @Component({
-    selector: 'app-chart',
-    templateUrl: './chart.component.html',
-    styleUrls: ['./chart.component.css'],
-    standalone: false
+  selector: 'app-chart',
+  templateUrl: './chart.component.html',
+  styleUrls: ['./chart.component.css'],
+  imports: [ReactiveFormsModule, FormsModule]
+
 })
 export class ChartComponent implements OnInit {
-  chartRef!: Chart;
+  chartRef: any;
   selectedYear!: number;
   availableYears: number[] = [];
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(private expenseService: ExpenseService) { }
 
   ngOnInit() {
     this.getMonthlyExpenses(); // fetch default (latest year) data
+    window.addEventListener('resize', () => {
+      if (this.chartRef)
+        this.chartRef.resize();
+    });
+
   }
+
 
   getMonthlyExpenses(year?: number) {
     this.expenseService.getMonthlyEarningsWithYears(year).subscribe({
@@ -81,6 +89,14 @@ export class ChartComponent implements OnInit {
       options: {
         responsive: true,
         aspectRatio: 2,
+        scales: {
+          x: {
+            ticks: {
+              maxRotation: 45,
+              minRotation: 0,
+            },
+          },
+        },
         layout: {
           padding: { top: 20 }
         },
@@ -91,7 +107,9 @@ export class ChartComponent implements OnInit {
             text: `Monthly Earnings vs Expenses - ${this.selectedYear}`
           },
           datalabels: {
-            display: true,
+            display: () => {
+              return window.innerWidth >= 768; // Show labels only if width is 768px or more
+            },
             anchor: 'end',
             align: 'top',
             offset: -4,
@@ -104,6 +122,7 @@ export class ChartComponent implements OnInit {
           }
         }
       },
+
       plugins: [ChartDataLabels]
     });
   }
@@ -117,17 +136,17 @@ export class ChartComponent implements OnInit {
     link.click();
   }
 
-  downloadChartPDF() {
-    const canvas = document.getElementById('monthlyEarningsChart') as HTMLCanvasElement;
-    const image = canvas.toDataURL('image/png');
-    html2pdf()
-      .from(`<div><h3>Monthly Earnings - ${this.selectedYear}</h3><img src="${image}" style="width:100%"/></div>`)
-      .set({
-        margin: 10,
-        filename: `monthly-earnings-${this.selectedYear}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-      })
-      .save();
-  }
+  // downloadChartPDF() {
+  //   const canvas = document.getElementById('monthlyEarningsChart') as HTMLCanvasElement;
+  //   const image = canvas.toDataURL('image/png');
+  //   html2pdf()
+  //     .from(`<div><h3>Monthly Earnings - ${this.selectedYear}</h3><img src="${image}" style="width:100%"/></div>`)
+  //     .set({
+  //       margin: 10,
+  //       filename: `monthly-earnings-${this.selectedYear}.pdf`,
+  //       html2canvas: { scale: 2 },
+  //       jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+  //     })
+  //     .save();
+  // }
 }

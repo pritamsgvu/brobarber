@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Service, ServiceService } from 'src/app/services/service.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Service, ServiceService } from '../../core/services/service.service';
+
 
 @Component({
     selector: 'app-service',
     templateUrl: './service.component.html',
     styleUrls: ['./service.component.css'],
-    standalone: false
-})
+    imports: [ReactiveFormsModule]
+
+  })
 export class ServiceComponent implements OnInit {
   services: Service[] = [];
   serviceForm: FormGroup;

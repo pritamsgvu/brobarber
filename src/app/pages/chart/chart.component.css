@@ -1,0 +1,12 @@
+#monthlyEarningsChart {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 400px;
+  }
+  
+  @media (max-width: 576px) {
+    #monthlyEarningsChart {
+      max-height: 300px;
+    }
+  }
+  

@@ -1,14 +1,14 @@
 import { Component, OnInit,  ViewChild, ElementRef  } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ProductService } from '../../services/product.service';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ProductService } from '../../core/services/product.service';
+// import html2canvas from 'html2canvas';
+// import jsPDF from 'jspdf';
 
 @Component({
     selector: 'app-product-management',
     templateUrl: './products.component.html',
     styleUrls: ['./products.component.css'],
-    standalone: false
+    imports: [ReactiveFormsModule]
 })
 export class ProductsComponent implements OnInit {
   productForm: FormGroup;
@@ -129,27 +129,28 @@ export class ProductsComponent implements OnInit {
   downloadPdf() {
     const content = this.menuContent.nativeElement;
 
-    html2canvas(content, { scale: 1.5, useCORS: true }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    // html2canvas(content, { scale: 1.5, useCORS: true }).then(canvas => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   // const pdf = new jsPDF('p', 'mm', 'a4');
+    //   const pdf: any = {};
+    //   const imgProps = pdf.getImageProperties(imgData);
+    //   const pdfWidth = pdf.internal.pageSize.getWidth();
+    //   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
     
-      // Add the image to the first page
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    //   // Add the image to the first page
+    //   pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       
-      let heightLeft = pdfHeight;
+    //   let heightLeft = pdfHeight;
       
-      // Add additional pages if needed
-      while (heightLeft > pdf.internal.pageSize.getHeight()) {
-        heightLeft -= pdf.internal.pageSize.getHeight();
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, -heightLeft, pdfWidth, pdfHeight);
-      }
+    //   // Add additional pages if needed
+    //   while (heightLeft > pdf.internal.pageSize.getHeight()) {
+    //     heightLeft -= pdf.internal.pageSize.getHeight();
+    //     pdf.addPage();
+    //     pdf.addImage(imgData, 'PNG', 0, -heightLeft, pdfWidth, pdfHeight);
+    //   }
     
-      pdf.save('brobarber-menu.pdf');
-    });
+    //   pdf.save('brobarber-menu.pdf');
+    // });
     
   }
   

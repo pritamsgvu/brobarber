@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TodoService } from 'src/app/services/todo.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TodoService } from '../../core/services/todo.service';
+
 
 interface Todo {
   _id?: string;
@@ -9,16 +11,17 @@ interface Todo {
 }
 
 @Component({
-    selector: 'app-todo',
-    templateUrl: './todo.component.html',
-    styleUrls: ['./todo.component.css'],
-    standalone: false
+  selector: 'app-todo',
+  templateUrl: './todo.component.html',
+  styleUrls: ['./todo.component.css'],
+  imports: [ReactiveFormsModule, FormsModule]
+
 })
 export class TodoComponent implements OnInit {
 
   todos: Todo[] = [];
   newTask: string = '';
-  loading : boolean = true;
+  loading: boolean = true;
 
   constructor(private todoService: TodoService) { }
 

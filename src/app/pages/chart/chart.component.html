@@ -15,14 +15,17 @@
 
   <!-- Download Buttons -->
   <div class="d-flex justify-content-center mb-3">
-    <button class="btn btn-outline-primary me-2" (click)="downloadChartImage()">Download Image</button>
-    <button class="btn btn-outline-danger" (click)="downloadChartPDF()">Download PDF</button>
+    <button class="btn btn-outline-primary me-2" (click)="downloadChartImage()">Download Report</button>
+    <!-- <button class="btn btn-outline-danger" (click)="downloadChartPDF()">Download PDF</button> -->
   </div>
 
   <!-- Chart -->
   <div class="row">
-    <div class="col-md-12">
-      <canvas id="monthlyEarningsChart"></canvas>
+    <div class="col-12">
+      <div style="position: relative; width: 100%; height: 100%;">
+        <canvas id="monthlyEarningsChart"></canvas>
+      </div>
     </div>
   </div>
+  
 </div>

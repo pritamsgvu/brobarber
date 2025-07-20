@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ExpenseService, Expense } from '../../services/expense.service';
-import { BarberService } from '../../services/barber.service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Expense, ExpenseService } from '../../core/services/expense.service';
+import { BarberService } from '../../core/services/barber.service';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
     selector: 'app-expenses',
     templateUrl: './expenses.component.html',
     styleUrls: ['./expenses.component.css'],
-    standalone: false
-})
+    imports: [ReactiveFormsModule, CommonModule, FormsModule]
+
+  })
 export class ExpensesComponent implements OnInit {
   expenseForm!: FormGroup;
   isEditing: boolean = false;

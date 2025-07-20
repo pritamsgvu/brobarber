@@ -1,12 +1,15 @@
 .navbar {
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-}
-
-.nav-link.active {
-  font-weight: bold;
-  border-bottom: 2px solid white;
-}
-
-.nav-link:hover {
-  color: #ccc !important;
-}
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+    z-index: 9999;
+    position: relative;
+  }
+  
+  .nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid white;
+  }
+  
+  .nav-link:hover {
+    color: #ccc !important;
+  }
+  

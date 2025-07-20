@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { BarberService } from '../../services/barber.service';
-import { BookingService } from '../../services/booking.service';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BarberService } from '../../core/services/barber.service';
+import { BookingService } from '../../core/services/booking.service';
 
 @Component({
-    selector: 'app-booking-form',
-    templateUrl: './booking-form.component.html',
-    styleUrls: ['./booking-form.component.css'],
-    standalone: false
+  selector: 'app-booking-form',
+  templateUrl: './booking-form.component.html',
+  styleUrls: ['./booking-form.component.css'],
+  imports: [ReactiveFormsModule]
 })
 export class BookingFormComponent implements OnInit {
   bookingForm!: FormGroup;
@@ -40,8 +40,8 @@ export class BookingFormComponent implements OnInit {
       netTotal: [0],
       paymentMode: ['cash', Validators.required],
       totalProductAmount: [0],
-      cashAmount:[0],
-      onlineAmount:[0],
+      cashAmount: [0],
+      onlineAmount: [0],
     });
 
     this.loadBarbers();
@@ -74,7 +74,7 @@ export class BookingFormComponent implements OnInit {
   loadBarbers() {
     this.barberService.getBarbers().subscribe(data => {
       this.barbers = data;
-      this.activeBarbers = data.filter(barber => barber.isActive == 'true');
+      this.activeBarbers = data.filter((barber: any) => barber.isActive == 'true');
 
     });
   }
