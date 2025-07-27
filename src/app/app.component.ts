@@ -15,6 +15,7 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent implements OnInit {
   isSidebarOpen = false;
   isLoggedIn = false;
+  role : any;
   isNavbarCollapsed = false;
   barberMenuOpen: boolean = false;
 
@@ -22,8 +23,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const userLoggedIn = localStorage.getItem('isLoggedIn');
+    const userDetails = localStorage.getItem('user') || '';
     if (userLoggedIn == 'true') {
       this.isLoggedIn = true;
+      this.role = JSON.parse(userDetails)?.role;
     } else {
       this.router.navigate(['']);
     }

@@ -29,4 +29,11 @@ export class BarberService {
   deleteBarber(barberId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${barberId}`);
   }
+
+  login(username: string, password: string) {
+    return this.http.post<any>(this.apiUrl + '/login', {
+      username,
+      password
+    });
+  }
 }
