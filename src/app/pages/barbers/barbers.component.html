@@ -7,10 +7,31 @@
       <label for="name" class="form-label">Name</label>
       <input id="name" formControlName="name" class="form-control" placeholder="Enter barber name" required />
     </div>
+    
+    <div class="col-md-6">
+      <label for="name" class="form-label">Username</label>
+      <input id="name" formControlName="username" class="form-control" placeholder="Enter unique user name" required />
+    </div>
+    
+    <div class="col-md-6">
+      <label for="password" class="form-label">Password</label>
+      <input id="password" formControlName="password" class="form-control"  type="password" placeholder="Choose password" required />
+    </div>
+
+    <div class="col-md-6">
+      <label for="role" class="form-label">User Role</label>
+      <select id="role" formControlName="role" class="form-select" required>
+        <option value="" disabled selected>Select a role</option>
+        <option value="admin">Admin</option>
+        <option value="manager">Manager</option>
+        <option value="barber">Barber</option>
+      </select>
+    </div>
+    
 
     <div class="col-md-6">
       <label for="mobile" class="form-label">Mobile</label>
-      <input id="mobile" formControlName="mobile" class="form-control" placeholder="Enter mobile number" required />
+      <input id="mobile" formControlName="mobile" maxlength="10" minlength="10"  class="form-control" placeholder="Enter mobile number" required />
     </div>
 
     <div class="col-md-6">
@@ -23,10 +44,10 @@
       <input id="aadhar" formControlName="aadhar" class="form-control" placeholder="Enter Aadhar number" />
     </div>
 
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
       <label for="photo" class="form-label">Photo URL</label>
       <input id="photo" formControlName="photo" class="form-control" placeholder="Enter photo URL or upload" />
-    </div>
+    </div> -->
 
     <div class="col-md-6 d-flex align-items-center mt-4">
       <div class="form-check form-switch switch-large mt-4">
@@ -70,7 +91,7 @@
                 <th>Mobile</th>
                 <th>Address</th>
                 <th>Aadhar</th>
-                <th>Photo</th>
+                <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -79,18 +100,12 @@
               @for (barber of barbers; track barber; let i = $index) {
                 <tr>
                   <td>{{ i + 1 }}</td>
-                  <td>{{ barber.name }}</td>
+                  <td>{{ barber.name | titlecase }}</td>
                   <td>{{ barber.mobile }}</td>
                   <td>{{ barber.address || '-' }}</td>
                   <td>{{ barber.aadhar || '-' }}</td>
-                  <td>
-                    @if (barber.photo) {
-                      <img [src]="barber.photo" alt="Barber Photo" width="50" height="50" class="rounded-circle" />
-                    }
-                    @if (!barber.photo) {
-                      <span class="text-muted">No Photo</span>
-                    }
-                  </td>
+                  <td>{{ barber?.role | titlecase }}</td>
+                  
                   <td>{{barber.isActive =='true' ? 'Active' : 'Deactive'}}</td>
                   <td>
                     <div class="d-flex gap-2">

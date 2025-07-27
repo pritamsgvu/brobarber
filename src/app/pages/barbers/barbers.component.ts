@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BarberService } from '../../core/services/barber.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-barbers',
   templateUrl: './barbers.component.html',
   styleUrls: ['./barbers.component.css'],
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, CommonModule]
 })
 export class BarbersComponent implements OnInit {
   barberForm!: FormGroup;
@@ -27,6 +28,9 @@ export class BarbersComponent implements OnInit {
   initForm() {
     this.barberForm = this.fb.group({
       name: ['', Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      role: ['', Validators.required],
       mobile: ['', Validators.required],
       address: [''],
       aadhar: [''],
@@ -80,6 +84,9 @@ export class BarbersComponent implements OnInit {
     this.barberForm.patchValue({
       name: barber.name,
       mobile: barber.mobile,
+      username: barber.username,
+      password: barber.password,
+      role: barber.role,
       address: barber.address,
       aadhar: barber.aadhar,
       photo: barber.photo,
