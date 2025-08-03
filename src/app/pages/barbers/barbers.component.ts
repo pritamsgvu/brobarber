@@ -34,7 +34,7 @@ export class BarbersComponent implements OnInit {
       mobile: ['', Validators.required],
       address: [''],
       aadhar: [''],
-      photo: [''],
+      photo: ['photo'],
       isActive: [false],
     });
   }
