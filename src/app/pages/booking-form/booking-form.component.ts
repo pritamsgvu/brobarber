@@ -74,7 +74,7 @@ export class BookingFormComponent implements OnInit {
   loadBarbers() {
     this.barberService.getBarbers().subscribe(data => {
       this.barbers = data;
-      this.activeBarbers = data.filter((barber: any) => barber.isActive == 'true');
+      this.activeBarbers = data.filter((barber: any) => barber.isActive == 'true' && barber.role == 'barber');
 
     });
   }
