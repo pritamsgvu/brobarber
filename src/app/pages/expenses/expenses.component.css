@@ -1,0 +1,16 @@
+.card {
+    border-radius: 10px;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+  }
+  
+  .card-body p {
+    font-size: 0.95rem;
+  }
+  
+  hr {
+    margin: 0.5rem 0;
+  }
+  

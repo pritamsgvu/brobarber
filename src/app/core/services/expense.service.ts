@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -18,6 +18,11 @@ export interface Expense {
   date: string;
   notes?: string;
   barberId?: string;
+}
+
+interface PaymentSummary {
+  totalCashReceived: number;
+  totalOnlineReceived: number;
 }
 
 @Injectable({
@@ -50,6 +55,14 @@ export class ExpenseService {
       `${this.apiUrl}/earnings-report`,
       params
     );
+  }
+
+  getPaymentSummary(fromDate: string, toDate: string): Observable<PaymentSummary> {
+    const params = new HttpParams()
+      .set('fromDate', fromDate)
+      .set('toDate', toDate);
+
+    return this.http.get<PaymentSummary>(`${environment.apiUrl}/transactions/monthly-payment-summary`, { params });
   }
   
   

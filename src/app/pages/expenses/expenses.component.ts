@@ -6,12 +6,12 @@ import { CommonModule } from '@angular/common';
 
 
 @Component({
-    selector: 'app-expenses',
-    templateUrl: './expenses.component.html',
-    styleUrls: ['./expenses.component.css'],
-    imports: [ReactiveFormsModule, CommonModule, FormsModule]
+  selector: 'app-expenses',
+  templateUrl: './expenses.component.html',
+  styleUrls: ['./expenses.component.css'],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule]
 
-  })
+})
 export class ExpensesComponent implements OnInit {
   expenseForm!: FormGroup;
   isEditing: boolean = false;
@@ -39,6 +39,10 @@ export class ExpensesComponent implements OnInit {
   filterBarberId: string = '';
 
   totalExpenseAmount: number = 0;
+  totalCash: any;
+  totalOnline: any;
+  totalCashExpenses: any;
+  totalOnlineExpenses: any;
 
   constructor(
     private fb: FormBuilder,
@@ -48,8 +52,11 @@ export class ExpensesComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.getCurrentDate();
     this.loadExpenses();
+    this.loadPaymentSummary();
     this.loadBarbers();
+
   }
 
   initForm(): void {
@@ -71,6 +78,45 @@ export class ExpensesComponent implements OnInit {
       }
       this.expenseForm.get('barberId')?.updateValueAndValidity();
     });
+  }
+
+  getCurrentDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // August = 7
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    this.filterFromDate = this.formatLocalDate(firstDay);
+    this.filterToDate = this.formatLocalDate(lastDay);
+
+    console.log('From:', this.filterFromDate); // ✅ 2025-08-01
+    console.log('To:', this.filterToDate);     // ✅ 2025-08-31
+
+  }
+
+  formatLocalDate(date: Date): string {
+    const yyyy = date.getFullYear();
+    const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+    const dd = date.getDate().toString().padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  loadPaymentSummary() {
+
+    this.expenseService.getPaymentSummary(this.filterFromDate, this.filterToDate)
+      .subscribe({
+        next: (res: any) => {
+          this.totalCash = res.totalCashReceived;
+          this.totalOnline = res.totalOnlineReceived;
+          console.log('totalCash', this.totalCash)
+          console.log('totalOnline', this.totalOnline)
+        },
+        error: (err) => {
+          console.error('Failed to load payment summary', err);
+        }
+      });
   }
 
   loadExpenses(): void {
@@ -102,43 +148,55 @@ export class ExpensesComponent implements OnInit {
 
   applyFilter(): void {
     let data = [...this.expenses];
-
+  
     // Text keyword filter
     const keyword = this.filterKeyword.toLowerCase().trim();
     if (keyword) {
       data = data.filter(exp =>
-      (exp.notes?.toLowerCase().includes(keyword) ||
-        exp.expenseType.toLowerCase().includes(keyword) ||
-        (exp.barberId && this.getBarberName(exp.barberId).toLowerCase().includes(keyword)))
+        (exp.notes?.toLowerCase().includes(keyword) ||
+          exp.expenseType.toLowerCase().includes(keyword) ||
+          (exp.barberId && this.getBarberName(exp.barberId).toLowerCase().includes(keyword)))
       );
     }
-
+  
     // Date filter
     if (this.filterFromDate) {
       const from = new Date(this.filterFromDate);
       data = data.filter(exp => new Date(exp.date) >= from);
     }
-
+  
     if (this.filterToDate) {
       const to = new Date(this.filterToDate);
       data = data.filter(exp => new Date(exp.date) <= to);
     }
-
+  
     // Expense type filter
     if (this.filterExpenseType) {
       data = data.filter(exp => exp.expenseType === this.filterExpenseType);
     }
-
+  
     // Barber filter
     if (this.filterBarberId) {
       data = data.filter(exp => exp.barberId === this.filterBarberId);
     }
-
+  
     this.filteredExpenses = data;
-
+  
     // Total expense calculation
     this.totalExpenseAmount = data.reduce((sum, exp) => sum + (exp.expenseAmount || 0), 0);
+  
+    // 💡 New Calculations: Cash & Online Expenses
+    this.totalCashExpenses = data
+      .filter(exp => exp.fromWhichAccount === 'cash')
+      .reduce((sum, exp) => sum + (exp.expenseAmount || 0), 0);
+  
+    this.totalOnlineExpenses = data
+      .filter(exp => exp.fromWhichAccount === 'online')
+      .reduce((sum, exp) => sum + (exp.expenseAmount || 0), 0);
+  
+    this.loadPaymentSummary(); // This already sets totalCash & totalOnline income
   }
+  
 
   formatDateForInput(date: string | Date): string {
     const d = new Date(date);
