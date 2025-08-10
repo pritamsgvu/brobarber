@@ -43,6 +43,7 @@ export class ExpensesComponent implements OnInit {
   totalOnline: any;
   totalCashExpenses: any;
   totalOnlineExpenses: any;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -208,6 +209,7 @@ export class ExpensesComponent implements OnInit {
 
   submitForm(): void {
     if (this.expenseForm.invalid) return;
+    this.isLoading = true;
 
     // const data: Expense = this.expenseForm.value;
     const formValue: Expense = this.expenseForm.value;
@@ -234,11 +236,15 @@ export class ExpensesComponent implements OnInit {
   createExpense(expense: Expense): void {
     this.expenseService.addExpense(expense).subscribe({
       next: (newExpense) => {
+        this.isLoading = false;
         this.expenses.unshift(newExpense);
         this.applyFilter();
         this.resetForm();
       },
-      error: (err) => console.error('Error creating expense:', err)
+      error: (err) => {
+        this.isLoading = false;
+        alert('Error creating expense')
+      }
     });
   }
 

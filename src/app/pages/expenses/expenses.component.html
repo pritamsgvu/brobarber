@@ -1,6 +1,13 @@
 <div class="container p-4">
 
   <h2 class="text-center mb-4">Add Expenses </h2>
+  <!-- loader -->
+  @if (isLoading) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+      </div>
+    </div>
+  }
 
   <!-- FORM -->
   <form [formGroup]="expenseForm" (ngSubmit)="submitForm()" class="mb-4 bg-white p-4 rounded shadow">
