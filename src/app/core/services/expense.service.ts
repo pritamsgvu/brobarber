@@ -65,5 +65,8 @@ export class ExpenseService {
     return this.http.get<PaymentSummary>(`${environment.apiUrl}/transactions/monthly-payment-summary`, { params });
   }
   
+  getCurrentMonthBarberCommission() {
+    return this.http.get<any[]>(`${this.apiUrl}/barber-commission/current-month`);
+  }
   
 }

@@ -157,6 +157,35 @@
     </div>
   
   </div>
+
+  <!-- BARBER COMMISSION SUMMARY -->
+<div class="card shadow border-0 mt-4" style="border-top: 5px solid #ffc107;">
+  <div class="card-body">
+    <h5 class="card-title text-warning fw-bold">
+      💈 Barber Commission (Current Month)
+    </h5>
+
+    <table class="table table-sm table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>Barber</th>
+          <th>Total Taken (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of barberCommissions">
+          <td>{{ item.barberName }}</td>
+          <td>₹{{ item.totalTaken }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="barberCommissions.length === 0" class="text-muted">
+      No commissions taken this month.
+    </div>
+  </div>
+</div>
+
   
 <br>
 

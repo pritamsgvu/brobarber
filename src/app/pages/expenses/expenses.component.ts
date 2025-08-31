@@ -44,6 +44,7 @@ export class ExpensesComponent implements OnInit {
   totalCashExpenses: any;
   totalOnlineExpenses: any;
   isLoading: boolean = false;
+  barberCommissions: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -57,7 +58,7 @@ export class ExpensesComponent implements OnInit {
     this.loadExpenses();
     this.loadPaymentSummary();
     this.loadBarbers();
-
+    this.loadBarberCommissionSummary();
   }
 
   initForm(): void {
@@ -135,10 +136,9 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
-  loadBarbers(): void {
-    this.barberService.getBarbers().subscribe({
-      next: (data) => this.barbers = data,
-      error: (err) => console.error('Failed to load barbers:', err)
+  loadBarbers() {
+    this.barberService.getBarbers().subscribe(data => {
+      this.barbers = data.filter((barber: any) => barber.isActive == 'true' && barber.role == 'barber');
     });
   }
 
@@ -289,6 +289,17 @@ export class ExpensesComponent implements OnInit {
     });
     this.isEditing = false;
     this.selectedExpense = null;
+  }
+
+  loadBarberCommissionSummary() {
+    this.expenseService.getCurrentMonthBarberCommission().subscribe({
+      next: (res) => {
+        this.barberCommissions = res;
+      },
+      error: (err) => {
+        console.error('Failed to load barber commissions', err);
+      }
+    });
   }
 
   resetFilters(): void {
