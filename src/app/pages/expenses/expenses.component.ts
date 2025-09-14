@@ -196,6 +196,7 @@ export class ExpensesComponent implements OnInit {
       .reduce((sum, exp) => sum + (exp.expenseAmount || 0), 0);
   
     this.loadPaymentSummary(); // This already sets totalCash & totalOnline income
+    this.loadBarberCommissionSummary(); // Refresh barber commissions based on current filters
   }
   
 
@@ -292,7 +293,23 @@ export class ExpensesComponent implements OnInit {
   }
 
   loadBarberCommissionSummary() {
-    this.expenseService.getCurrentMonthBarberCommission().subscribe({
+    // Set default dates if filterFromDate and filterToDate are not provided
+    let fromDate = this.filterFromDate;
+    let toDate = this.filterToDate;
+  
+    if (!fromDate || !toDate) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth(); // 0-based
+  
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+  
+      fromDate = firstDay.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+      toDate = lastDay.toISOString().split('T')[0];   // 'YYYY-MM-DD'
+    }
+  
+    this.expenseService.getCurrentMonthBarberCommission(fromDate, toDate).subscribe({
       next: (res) => {
         this.barberCommissions = res;
       },
@@ -301,6 +318,7 @@ export class ExpensesComponent implements OnInit {
       }
     });
   }
+  
 
   resetFilters(): void {
     this.filterKeyword = '';

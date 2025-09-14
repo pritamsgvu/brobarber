@@ -65,8 +65,25 @@ export class ExpenseService {
     return this.http.get<PaymentSummary>(`${environment.apiUrl}/transactions/monthly-payment-summary`, { params });
   }
   
-  getCurrentMonthBarberCommission() {
-    return this.http.get<any[]>(`${this.apiUrl}/barber-commission/current-month`);
+  getCurrentMonthBarberCommission(fromDate?: string, toDate?: string) {
+    // If fromDate or toDate are not provided, set them to current month's first and last date
+    if (!fromDate || !toDate) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth(); // 0-based
+  
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+  
+      fromDate = firstDay.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+      toDate = lastDay.toISOString().split('T')[0];   // 'YYYY-MM-DD'
+    }
+  
+    const params = `?fromDate=${fromDate}&toDate=${toDate}`;
+  
+    return this.http.get<any[]>(`${this.apiUrl}/barber-commission/current-month${params}`);
   }
+  
+  
   
 }
